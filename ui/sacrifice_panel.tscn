@@ -1,0 +1,66 @@
+[gd_scene load_steps=3 format=3 uid="uid://bnnsacpanel001"]
+
+[ext_resource type="Script" path="res://ui/sacrifice_panel.gd" id="1_panel"]
+[ext_resource type="Texture2D" path="res://assets/icons/ui/icon_sacrifice.png" id="2_icon"]
+
+[node name="SacrificePanel" type="CanvasLayer"]
+layer = 5
+script = ExtResource("1_panel")
+
+[node name="Root" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="Root"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.058, 0.047, 0.07, 0.78)
+
+[node name="Panel" type="Panel" parent="Root"]
+offset_left = 150.0
+offset_top = 22.0
+offset_right = 490.0
+offset_bottom = 322.0
+
+[node name="Icon" type="TextureRect" parent="Root/Panel"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_icon")
+
+[node name="Title" type="Label" parent="Root/Panel"]
+offset_left = 46.0
+offset_top = 8.0
+offset_right = 332.0
+offset_bottom = 46.0
+theme_override_colors/font_color = Color(0.706, 0.392, 0.118, 1)
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 2
+text = "Sacrifice"
+
+[node name="Body" type="Label" parent="Root/Panel"]
+offset_left = 12.0
+offset_top = 50.0
+offset_right = 328.0
+offset_bottom = 244.0
+theme_override_colors/font_color = Color(0.769, 0.722, 0.604, 1)
+theme_override_font_sizes/font_size = 9
+autowrap_mode = 2
+
+[node name="Warnings" type="Label" parent="Root/Panel"]
+offset_left = 12.0
+offset_top = 246.0
+offset_right = 328.0
+offset_bottom = 276.0
+theme_override_colors/font_color = Color(0.831, 0.353, 0.294, 1)
+theme_override_font_sizes/font_size = 9
+autowrap_mode = 2
+
+[node name="Confirm" type="Button" parent="Root/Panel"]
+offset_left = 108.0
+offset_top = 278.0
+offset_right = 232.0
+offset_bottom = 298.0
+theme_override_font_sizes/font_size = 11
+text = "Accept  (Enter)"
