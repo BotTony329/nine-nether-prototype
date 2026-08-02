@@ -1,0 +1,15 @@
+# Documentary ownership map. Claude and Codex may share this GitHub identity.
+# Core architecture — Claude review required
+/core/                  @BotTony329
+/systems/               @BotTony329
+/actors/player/         @BotTony329
+/docs/ARCHITECTURE.md   @BotTony329
+/docs/INTERFACES.md     @BotTony329
+/docs/DECISIONS.md      @BotTony329
+
+# Module implementation — Codex may implement; Claude reviews integration
+/actors/enemies/        @BotTony329
+/actors/boss/           @BotTony329
+/ui/                    @BotTony329
+/data/                  @BotTony329
+/tests/                 @BotTony329
