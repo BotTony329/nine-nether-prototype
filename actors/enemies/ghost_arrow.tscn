@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://actors/enemies/ghost_arrow.gd" id="1_arrow"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_arrow"]
+radius = 2.0
+height = 12.0
+
+[node name="GhostArrow" type="Area2D"]
+collision_layer = 64
+collision_mask = 9
+script = ExtResource("1_arrow")
+
+[node name="FallbackVisual" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-7, -1, 4, -1, 4, -3, 8, 0, 4, 3, 4, 1, -7, 1)
+color = Color(0.31, 0.88, 0.65, 0.9)
+
+[node name="Shape" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_arrow")

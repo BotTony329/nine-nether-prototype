@@ -50,6 +50,18 @@ ACTORS = {
             ("death", "assets/enemy/ghost_melee_death.png", 4, 8.0, False),
         ],
     ),
+    "ghost_archer": (
+        "actors/enemies/ghost_archer_frames.tres",
+        48,
+        48,
+        [
+            ("idle", "assets/enemy/ghost_archer_idle.png", 4, 8.0, True),
+            ("run", "assets/enemy/ghost_archer_run.png", 6, 10.0, True),
+            ("attack", "assets/enemy/ghost_archer_attack.png", 4, 12.0, False),
+            ("hurt", "assets/enemy/ghost_archer_hurt.png", 2, 10.0, False),
+            ("death", "assets/enemy/ghost_archer_death.png", 4, 8.0, False),
+        ],
+    ),
     "boss": (
         "actors/boss/boss_frames.tres",
         96,
