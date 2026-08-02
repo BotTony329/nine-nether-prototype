@@ -14,6 +14,9 @@ extends RefCounted
 ## identical `_run_transaction`. `preview` runs it on a clone. There is no
 ## second code path, so a preview cannot lie.
 
+## Float slack for the "a sacrifice cannot restore integrity" invariant.
+const INTEGRITY_EPSILON := 1e-9
+
 var _balance: BalanceConfig
 
 func _init(balance: BalanceConfig) -> void:
@@ -82,10 +85,18 @@ func _run_transaction(state: RunState, definition: SacrificeDefinition) -> Sacri
 	result.before = before
 
 	# 3. apply cost, 4. integrity recalculates inside each structural command
-	var cost_applied: Dictionary = _apply_cost(state, definition)
-	if not bool(cost_applied["ok"]):
+	var integrity_before: float = float(before["integrity"])
+	_apply_cost(state, definition)
+
+	# A sacrifice can never make the body more whole. If a card's data says
+	# otherwise — a designer typing 1.15 where 0.85 was meant — the transaction
+	# is rejected and rolled back rather than silently rewarding the player.
+	if state.integrity() > integrity_before + INTEGRITY_EPSILON:
 		state.restore(before)
-		return SacrificeResult.failed(definition.id, cost_applied["reason"])
+		return SacrificeResult.failed(
+			definition.id,
+			"cost raised integrity %.4f → %.4f" % [integrity_before, state.integrity()]
+		)
 
 	var components_after: Dictionary = IntegrityService.components_of(
 		state.structural_snapshot(), _balance
@@ -113,7 +124,7 @@ func _run_transaction(state: RunState, definition: SacrificeDefinition) -> Sacri
 	return result
 
 
-func _apply_cost(state: RunState, definition: SacrificeDefinition) -> Dictionary:
+func _apply_cost(state: RunState, definition: SacrificeDefinition) -> void:
 	if not is_equal_approx(definition.cost_max_hp_multiplier, 1.0):
 		state.scale_max_hp(definition.cost_max_hp_multiplier)
 	if not is_equal_approx(definition.cost_max_stamina_multiplier, 1.0):
@@ -128,7 +139,6 @@ func _apply_cost(state: RunState, definition: SacrificeDefinition) -> Dictionary
 		state.add_structural_lock(lock_id)
 	for tax_id in definition.cost_action_taxes:
 		state.add_action_tax(tax_id)
-	return {"ok": true, "reason": ""}
 
 
 func _apply_reward(state: RunState, definition: SacrificeDefinition, gain: float) -> void:
@@ -213,10 +223,13 @@ func _warnings(definition: SacrificeDefinition, result: SacrificeResult) -> Arra
 		warnings.append("Permanent rule lock: %s" % lock_id)
 	for tax_id in definition.cost_action_taxes:
 		warnings.append("Action tax: %s" % tax_id)
-	if float(result.deltas.get("effective_hp", 0.0)) < 0.0:
+	# Deliberately not restating the numbers already on the card: a warning that
+	# repeats the cost block trains players to skip warnings.
+	var integrity_delta := float(result.deltas.get("integrity", 0.0))
+	if integrity_delta <= -0.01:
 		warnings.append(
-			"Effective HP %.1f → %.1f"
-			% [result.before["effective_hp"], result.after["effective_hp"]]
+			"Permanent structural loss — integrity %+.3f, and healing cannot undo it"
+			% integrity_delta
 		)
 	return warnings
 
