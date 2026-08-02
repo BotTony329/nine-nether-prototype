@@ -33,7 +33,7 @@ The main scene is `res://scenes/main.tscn`. There are no external dependencies â
 | --- | --- |
 | `F1` | Toggle the RunState readout (seed, phase, player state, every stat, snapshot hash) |
 | `F2` / `F3` | Heal / damage the player |
-| `F4` | Spawn a reference enemy next to the player |
+| `F4` | Spawn a Ghost Archer next to the player |
 | `F5` | Start the boss encounter |
 | `F6` / `F7` | Preview / apply the sacrifice |
 | `F8` | Toggle hit, hurt and body boxes |

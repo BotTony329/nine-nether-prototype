@@ -28,7 +28,7 @@ files in section 3.
 | ID | Task | Owner | Status | Branch | Dependency | PR |
 | --- | --- | --- | --- | --- | --- | --- |
 | X01 | Melee ghost — full behaviour | Codex | Ready | `codex/x01-melee-ghost` | `EnemyBase` frozen | — |
-| X02 | Ranged ghost — projectile, spacing, reposition | Codex | Ready | `codex/x02-ranged-ghost` | `EnemyBase` frozen | — |
+| X02 | Ghost Archer — projectile, spacing, reposition | Codex | Done | `codex/x02-ghost-archer` | `EnemyBase` frozen | Pending review |
 | X03 | Charger ghost — telegraphed line charge, wall stagger | Codex | Ready | `codex/x03-charger-ghost` | `EnemyBase` frozen | — |
 | X04 | Boss attack pack — three moves | Codex | Blocked on art | `codex/x04-boss-attacks` | ADR-010 | — |
 | X05 | Sacrifice selection UI — A/B/C slots | Codex | Ready | `codex/x05-sacrifice-ui` | `SacrificeService` frozen | — |

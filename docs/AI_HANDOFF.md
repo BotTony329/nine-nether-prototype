@@ -1,8 +1,8 @@
 # AI Handoff
 
-- **Current branch:** `claude/core-framework` (PR open into `develop`, unmerged)
-- **Current phase:** M1 — playable vertical slice foundation, delivered
-- **Next owner:** Game Director (review), then Codex for X01–X08
+- **Current branch:** `codex/x02-ghost-archer`
+- **Current phase:** X02 Ghost Archer implemented on the M1 foundation
+- **Next owner:** Claude and Game Director for X02 review
 - **Last updated:** 2026-08-02 (Australia/Melbourne)
 
 ---
@@ -31,6 +31,8 @@ display during development. Engine: Godot 4.3 stable.
 | Player | Move, jump, light attack, hit reaction, death, restart, camera follow, 5-state machine |
 | `EnemyBase` | Detect, approach, telegraphed wind-up, attack, recovery, hurt, idempotent death |
 | Reference enemy | 鬼卒 Ghost Soldier at X01 timings |
+| Ghost Archer (X02) | Patrol, detect, maintain range, retreat, aim, shoot, cooldown, hurt and death |
+| Ghost Arrow (X02) | Fixed trajectory, one hit, owner exclusion, impact/timeout cleanup, CombatResolver path |
 | `BossActor` | Extends `EnemyBase`; idle, chase, one telegraphed melee attack, health bar, victory |
 | Arena | One fixed 1024×360 space, collision, spawns, parallax, camera bounds |
 | UI | HUD, sacrifice preview/confirm, death and victory screens, restart |
@@ -77,7 +79,7 @@ All interfaces these depend on are now frozen. See `docs/TASKS/README.md`.
 | ID | Task | Depends on | Notes |
 | --- | --- | --- | --- |
 | X01 | Melee ghost, full behaviour | `EnemyBase` | The reference enemy is a starting point, not the finished X01 |
-| X02 | Ranged ghost | `EnemyBase` | Art present: `ghost_archer_*`. Needs a projectile; do not add a second damage path |
+| X02 | Ghost Archer | `EnemyBase` | **Done on `codex/x02-ghost-archer`; pending review** |
 | X03 | Charger ghost | `EnemyBase` | Art present: `corpse_beast_*` at 64×48 — needs its own collider sizes |
 | X04 | Boss attack pack | `BossActor` | Blocked on art or a ruling — see gaps below |
 | X05 | Sacrifice selection UI | `SacrificeService` | Three A/B/C slots; preview through the service, confirm through the coordinator |
@@ -109,11 +111,14 @@ director, and the Boss `PhaseController`.
 7. **No audio.** Out of scope for M1.
 8. **Placeholder art everywhere.** Magenta border = placeholder, per
    `docs/ART_SPEC.md` section 5.
+9. **The Ghost Arrow has no supplied sprite.** X02 uses a small procedural
+   polygon fallback in `ghost_arrow.tscn`; replace only the `FallbackVisual`
+   when approved projectile art arrives. Collision and behaviour are final.
 
 ## Test status
 
-- **Last successful run:** 2026-08-02 — 52 tests, 205 assertions, 0 failures,
-  Godot 4.3 stable headless.
+- **Last successful run:** 2026-08-02 — 59 tests, 229 assertions, 0 failures,
+  Godot 4.7.1 stable headless locally. Existing CI remains pinned to Godot 4.3.
 - **Command:** `godot --headless --import` then
   `godot --headless --path . res://tests/test_runner.tscn`
 - **CI:** `repository-validation` (unchanged) and `godot-tests` (new). Both
@@ -125,7 +130,8 @@ director, and the Boss `PhaseController`.
 | --- | --- |
 | `assets/player/` | All 6 sheets used; dimensions match `docs/ART_SPEC.md` exactly |
 | `assets/enemy/ghost_melee_*` | All 5 sheets used |
-| `assets/enemy/ghost_archer_*`, `corpse_beast_*` | Verified, unused — X02 and X03 |
+| `assets/enemy/ghost_archer_*` | All 5 sheets used by X02 |
+| `assets/enemy/corpse_beast_*` | Verified, unused — X03 |
 | `assets/boss/` | idle, run, attack, hurt, death used; only one attack sheet exists |
 | `assets/tiles/` | floor, stone_brick, brazier, tombstone used; `tile_wall`, `tile_wood_bridge`, `tile_ground_spike` unused (no platforms or hazards in M1) |
 | `assets/background/` | bg_deep, bg_tree, bg_broken_flag, bg_chains all used in three parallax layers |
@@ -137,3 +143,24 @@ director, and the Boss `PhaseController`.
 Nothing was stretched, scaled by a non-integer factor, or resized. Regenerate
 `SpriteFrames` with `python3 tools/generate_sprite_frames.py` after replacing a
 sheet; it aborts if the new dimensions disagree with the spec.
+
+## X02 handoff
+
+### Files added
+
+- `actors/enemies/ghost_archer.gd`, `.tscn`, `_config.gd`, and `_frames.tres`
+- `actors/enemies/ghost_arrow.gd` and `.tscn`
+- `data/actors/ghost_archer.tres` and `ghost_archer_tactics.tres`
+- `tests/cases/test_ghost_archer.gd`
+
+### Integration and validation
+
+- `scenes/main.tscn` injects the Ghost Archer through the existing
+  `RunCoordinator.enemy_scene` / `enemy_config` extension seam. The wave and F4
+  debug command therefore use the same coordinator-owned spawn path.
+- Added tests for patrol/detection, retreat spacing, aim/shoot/cooldown, one-hit
+  projectile resolution, armour integration, owner exclusion, timeout, damage,
+  death, and no post-death behaviour.
+- Commands run: SpriteFrames generator, headless import, full test scene, and a
+  180-frame headless M1 main-scene smoke run.
+- No frozen interface or protected framework file changed.
