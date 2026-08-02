@@ -12,7 +12,10 @@ signal phase_changed(phase: StringName)
 signal state_ready(state: RunState)
 signal sacrifice_offered(definition: SacrificeDefinition)
 signal boss_spawned(boss: BossActor)
-signal run_finished(outcome: StringName)
+## Carries the finished run's RunResult. Emitted exactly once per run: both
+## death and victory arrive here through `_finish_run`, which is guarded by the
+## phase machine. See docs/GHOST_MARKET_LOOP.md and ADR-013.
+signal run_finished(result: RunResult)
 
 const PHASE_BOOT := &"boot"
 const PHASE_WAVE := &"wave"
@@ -32,6 +35,11 @@ const M1_SACRIFICE_ID := &"severed_lifespan"
 @export var arena_path: NodePath
 @export var actor_root_path: NodePath
 
+## Flat starting attack granted by meta progression. Set by the caller before
+## `start_run`; zero when the run scene is played standalone. This is the only
+## channel through which the Ghost Market touches a run's numbers.
+var meta_attack_bonus: float = 0.0
+
 var _arena: Arena
 var _actor_root: Node2D
 var _state: RunState
@@ -40,6 +48,9 @@ var _boss: BossActor
 var _phase: StringName = PHASE_BOOT
 var _live_enemies: Array[EnemyBase] = []
 var _run_counter: int = 0
+var _kills: int = 0
+var _run_started_msec: int = 0
+var _result: RunResult
 
 
 ## Resolves scene references only. The run is started by Main once every
@@ -69,6 +80,13 @@ func live_enemies() -> Array[EnemyBase]:
 func offered_sacrifice() -> SacrificeDefinition:
 	return GameData.definition(M1_SACRIFICE_ID)
 
+## The finished run's result, or null while a run is in progress.
+func last_result() -> RunResult:
+	return _result
+
+func kills() -> int:
+	return _kills
+
 
 ## Fresh run. Reusing the scene rather than reloading it keeps the seed under
 ## our control, which is what makes a reported bug replayable.
@@ -79,7 +97,14 @@ func start_run(run_seed: int, restarted: bool = false) -> void:
 	EventBus.bind_run(_run_counter)
 
 	_clear_actors()
+	_kills = 0
+	_result = null
+	_run_started_msec = Time.get_ticks_msec()
 	_state = RunState.create(GameData.balance, run_seed)
+	# Meta progression is applied once, at creation, so the rest of the run sees
+	# it as an ordinary starting stat. Nothing downstream special-cases it.
+	if not is_zero_approx(meta_attack_bonus):
+		_state.add_flat_attack(meta_attack_bonus)
 	_state.set_run_status(RunState.STATUS_ACTIVE)
 	_spawn_player()
 	state_ready.emit(_state)
@@ -154,13 +179,29 @@ func begin_boss() -> void:
 	boss_spawned.emit(_boss)
 
 
+## The single run-end path. Death and victory both arrive here, and the phase
+## guard makes a second request a no-op — the run cannot end twice.
 func _finish_run(outcome: StringName) -> void:
 	if _phase == PHASE_RESULT:
 		return
 	_set_phase(PHASE_RESULT)
 	_state.set_run_status(outcome)
-	EventBus.run_completed.emit(EventBus.context({"outcome": outcome}))
-	run_finished.emit(outcome)
+	_result = _build_result(outcome)
+	EventBus.run_completed.emit(EventBus.context(_result.to_dictionary()))
+	run_finished.emit(_result)
+
+
+func _build_result(outcome: StringName) -> RunResult:
+	var result := RunResult.new()
+	result.outcome = outcome
+	result.duration_seconds = float(Time.get_ticks_msec() - _run_started_msec) / 1000.0
+	result.kills = _kills
+	result.sacrifices = _state.sacrifice_history().size()
+	result.integrity = _state.integrity()
+	result.imbalance = _state.imbalance()
+	# soul_ash_earned stays 0 here: pricing a run is a meta concern, applied by
+	# MetaState.record_run.
+	return result
 
 
 # --- spawning ---------------------------------------------------------------
@@ -204,11 +245,13 @@ func _clear_actors() -> void:
 
 func _on_enemy_died(enemy: EnemyBase) -> void:
 	_live_enemies.erase(enemy)
+	_kills += 1
 	if _phase == PHASE_WAVE and _live_enemies.is_empty():
 		_begin_sacrifice()
 
 
 func _on_boss_defeated(_boss_actor: BossActor) -> void:
+	_kills += 1
 	_finish_run(RunState.STATUS_VICTORY)
 
 

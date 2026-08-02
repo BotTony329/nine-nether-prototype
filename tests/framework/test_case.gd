@@ -37,6 +37,15 @@ func step_physics(count: int) -> void:
 	for _i in range(count):
 		await tree.physics_frame
 
+## Steps physics until `condition` returns true, up to `max_frames`. Returns
+## whether it became true, so a caller can assert rather than hang.
+func wait_for(condition: Callable, max_frames: int = 240) -> bool:
+	for _i in range(max_frames):
+		if bool(condition.call()):
+			return true
+		await tree.physics_frame
+	return bool(condition.call())
+
 ## A BalanceConfig detached from the shipped resource, so a test can retune a
 ## value without leaking the change into the next test.
 func make_balance() -> BalanceConfig:

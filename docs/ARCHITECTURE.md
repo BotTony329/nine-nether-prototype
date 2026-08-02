@@ -48,7 +48,16 @@ Follows Prototype Development Pack A3, plus `scenes/` (see ADR-009).
 
 ## 3. Scene tree
 
-`scenes/main.tscn` matches Prototype Development Pack A4:
+`scenes/app.tscn` is the main scene and the composition root outside a run. It
+owns the meta profile and keeps exactly one child scene in the tree — the market
+or a run, never both. See `docs/GHOST_MARKET_LOOP.md`.
+
+```
+App (Node, scenes/app.gd)              ← owns MetaState + MetaSave
+└── GhostMarket (scenes/ghost_market.tscn)   ← or Main, never both
+```
+
+`scenes/main.tscn` is one run, and matches Prototype Development Pack A4:
 
 ```
 Main (Node2D, scenes/main.gd)          ← composition root
@@ -64,10 +73,11 @@ Main (Node2D, scenes/main.gd)          ← composition root
     └── DebugShapes (DebugShapeOverlay)
 ```
 
-`Main._ready()` binds every observer and only then calls
-`RunCoordinator.start_run()`. Starting the run from the coordinator's own
-`_ready` would let observers bind after the opening `state_ready` had already
-fired.
+`Main._ready()` binds every observer before the run starts. Starting the run
+from the coordinator's own `_ready` would let observers bind after the opening
+`state_ready` had already fired. `App` sets `autostart = false` and calls
+`start_run` itself once it has bound too; with `autostart` left on, `main.tscn`
+plays standalone in the editor with no meta layer.
 
 Actor scenes:
 
@@ -90,6 +100,8 @@ No core calculation lives in `Main`, in `Arena` or in any UI node.
 | Sacrifice library | `GameData` (autoload) | Process |
 | RNG streams | `RNGService` (autoload) | Re-seeded per run |
 | Active `RunState` | `RunCoordinator` | One run |
+| `MetaState` (soul ash, counters, upgrade) | `App` | Process, persisted to `user://meta_save.json` |
+| Latest `RunResult` | `App` | Until the next run ends |
 | Enemy and Boss HP | The actor instance | One actor |
 | Everything the UI shows | Nobody — it is read each frame | — |
 
@@ -265,3 +277,5 @@ Listed so nobody mistakes absence for oversight. Each is scoped to a later task.
 - No three-slot sacrifice generator: M1 offers one card at a fixed point.
 - No Boss phase controller or attack scheduler.
 - No telemetry persistence: events are emitted but nothing writes them to disk.
+- Meta progression is one upgrade and one currency (M2). No upgrade tree, no
+  meta unlocks touching the sacrifice pool or the enemy roster.

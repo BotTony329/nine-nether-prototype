@@ -10,7 +10,7 @@ config_version=5
 
 config/name="Nine Nether"
 config/description="Godot 4 greybox prototype: sacrifice structural survival for offensive power."
-run/main_scene="res://scenes/main.tscn"
+run/main_scene="res://scenes/app.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 
 [autoload]

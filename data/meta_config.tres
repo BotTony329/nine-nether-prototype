@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MetaConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://core/meta_config.gd" id="1_meta_config"]
+
+[resource]
+script = ExtResource("1_meta_config")
+soul_ash_base = 5
+soul_ash_per_kill = 2
+soul_ash_victory_bonus = 25
+tempered_blade_cost = 40
+tempered_blade_attack_bonus = 2.0

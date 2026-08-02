@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://bnnghostmelee01"]
 
 [ext_resource type="PackedScene" path="res://actors/enemies/enemy_base.tscn" id="1_base"]
-[ext_resource type="SpriteFrames" path="res://assets_v2/godot/melee_ghost_frames.tres" id="2_frames"]
+[ext_resource type="SpriteFrames" path="res://assets_v3/godot/melee_ghost_frames.tres" id="2_frames"]
 [ext_resource type="Script" path="res://actors/enemies/melee_ghost.gd" id="3_script"]
 [ext_resource type="Script" path="res://visuals/death_effect.gd" id="4_death_effect"]
 [ext_resource type="Texture2D" path="res://assets_v3/production/effects/death.png" id="5_death_texture"]
