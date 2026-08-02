@@ -1,0 +1,43 @@
+name: Bug report
+description: Report a reproducible prototype defect
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes: { label: Summary }
+    validations: { required: true }
+  - type: input
+    id: build
+    attributes: { label: Build/version }
+    validations: { required: true }
+  - type: input
+    id: revision
+    attributes: { label: Branch/commit }
+    validations: { required: true }
+  - type: textarea
+    id: reproduction
+    attributes: { label: Reproduction steps, placeholder: "1.\n2.\n3." }
+    validations: { required: true }
+  - type: textarea
+    id: expected
+    attributes: { label: Expected behaviour }
+    validations: { required: true }
+  - type: textarea
+    id: actual
+    attributes: { label: Actual behaviour }
+    validations: { required: true }
+  - type: textarea
+    id: evidence
+    attributes: { label: Screenshots/logs }
+  - type: input
+    id: seed
+    attributes: { label: Seed, description: Enter the RNG seed when applicable. }
+  - type: dropdown
+    id: severity
+    attributes: { label: Severity, options: [Blocker, Major, Minor, Cosmetic] }
+    validations: { required: true }
+  - type: input
+    id: system
+    attributes: { label: Affected system }
+    validations: { required: true }

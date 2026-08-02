@@ -1,0 +1,46 @@
+name: Controlled feature task
+description: Define an approved prototype implementation task
+title: "[Task] "
+body:
+  - type: input
+    id: task_id
+    attributes: { label: Task ID }
+    validations: { required: true }
+  - type: dropdown
+    id: owner
+    attributes: { label: Owner, options: [Claude, Codex] }
+    validations: { required: true }
+  - type: textarea
+    id: objective
+    attributes: { label: Objective }
+    validations: { required: true }
+  - type: input
+    id: source
+    attributes: { label: Source document, description: Cite the governing requirement and section. }
+    validations: { required: true }
+  - type: textarea
+    id: inputs
+    attributes: { label: Inputs }
+  - type: textarea
+    id: outputs
+    attributes: { label: Expected outputs }
+    validations: { required: true }
+  - type: textarea
+    id: forbidden
+    attributes: { label: Forbidden changes }
+    validations: { required: true }
+  - type: textarea
+    id: acceptance
+    attributes: { label: Acceptance criteria }
+    validations: { required: true }
+  - type: textarea
+    id: tests
+    attributes: { label: Test requirements }
+    validations: { required: true }
+  - type: textarea
+    id: dependencies
+    attributes: { label: Dependencies }
+  - type: input
+    id: target
+    attributes: { label: Target branch, value: develop }
+    validations: { required: true }
