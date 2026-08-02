@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="SacrificeDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://systems/sacrifice_definition.gd" id="1_sacrifice"]
+
+[resource]
+script = ExtResource("1_sacrifice")
+id = &"severed_lifespan"
+display_name = "断寿之契 — Oath of Severed Lifespan"
+strength = 2
+rarity = &"common"
+tags = Array[StringName]([&"attack", &"hp_sacrifice"])
+roles = Array[StringName]([&"CONTINUATION"])
+exclusive_group = &""
+base_weight = 100.0
+prerequisite_min_sacrifices = 0
+banned_with = Array[StringName]([])
+cost_max_hp_multiplier = 0.85
+cost_max_stamina_multiplier = 1.0
+cost_armour_multiplier = 1.0
+cost_stamina_recovery_multiplier = 1.0
+cost_structural_locks = Array[StringName]([])
+cost_action_taxes = Array[StringName]([])
+imbalance_flat = 16.0
+reward_additive = 0.18
+reward_generic_more = true
+reward_crit_rate = 0.0
+reward_crit_damage = 0.0
+reward_attack_speed_multiplier = 1.0
+triggers = [{
+"condition": "hp_ratio <= 0.30",
+"effect": "more_multiplier:1.12",
+"event": "OnHitDealt"
+}]
+short_text = "Cut your lifespan short; the blade drinks what the body loses."
+preview_template = "Max lifespan {max_hp_delta}, attack {attack_gain}, imbalance +{imbalance_delta}"
+warning_level = &"medium"

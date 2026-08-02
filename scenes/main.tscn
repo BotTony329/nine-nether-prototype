@@ -1,0 +1,47 @@
+[gd_scene load_steps=13 format=3 uid="uid://bnnmain0000001"]
+
+[ext_resource type="Script" path="res://scenes/main.gd" id="1_main"]
+[ext_resource type="PackedScene" path="res://scenes/arena.tscn" id="2_arena"]
+[ext_resource type="Script" path="res://systems/run_coordinator.gd" id="3_coordinator"]
+[ext_resource type="PackedScene" path="res://actors/player/player.tscn" id="4_player"]
+[ext_resource type="PackedScene" path="res://actors/enemies/ghost_melee.tscn" id="5_enemy"]
+[ext_resource type="PackedScene" path="res://actors/boss/boss.tscn" id="6_boss"]
+[ext_resource type="Resource" path="res://data/actors/ghost_melee.tres" id="7_enemy_config"]
+[ext_resource type="Resource" path="res://data/actors/boss_gate_guardian.tres" id="8_boss_config"]
+[ext_resource type="PackedScene" path="res://ui/hud.tscn" id="9_hud"]
+[ext_resource type="PackedScene" path="res://ui/sacrifice_panel.tscn" id="10_sacrifice"]
+[ext_resource type="PackedScene" path="res://ui/result_screen.tscn" id="11_result"]
+[ext_resource type="PackedScene" path="res://ui/debug_panel.tscn" id="12_debug"]
+[ext_resource type="Script" path="res://ui/debug_shape_overlay.gd" id="13_shapes"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="Arena" parent="." instance=ExtResource("2_arena")]
+
+[node name="Actors" type="Node2D" parent="."]
+
+[node name="RunCoordinator" type="Node" parent="."]
+script = ExtResource("3_coordinator")
+player_scene = ExtResource("4_player")
+enemy_scene = ExtResource("5_enemy")
+boss_scene = ExtResource("6_boss")
+enemy_config = ExtResource("7_enemy_config")
+boss_config = ExtResource("8_boss_config")
+arena_path = NodePath("../Arena")
+actor_root_path = NodePath("../Actors")
+
+[node name="UIRoot" type="Node" parent="."]
+
+[node name="Hud" parent="UIRoot" instance=ExtResource("9_hud")]
+
+[node name="SacrificePanel" parent="UIRoot" instance=ExtResource("10_sacrifice")]
+
+[node name="ResultScreen" parent="UIRoot" instance=ExtResource("11_result")]
+
+[node name="DebugRoot" type="Node" parent="."]
+
+[node name="DebugPanel" parent="DebugRoot" instance=ExtResource("12_debug")]
+
+[node name="DebugShapes" type="Node2D" parent="DebugRoot"]
+script = ExtResource("13_shapes")

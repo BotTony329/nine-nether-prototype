@@ -1,0 +1,71 @@
+name: godot-tests
+
+# Separate from `repository-validation`, which checks repository hygiene and
+# must keep passing on its own. This workflow only answers one question: does
+# the game still build its resources and pass its automated tests?
+
+on:
+  pull_request:
+    branches: [develop, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  GODOT_VERSION: 4.3-stable
+
+jobs:
+  godot-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Godot binary
+        id: godot-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/godot-bin
+          key: godot-${{ env.GODOT_VERSION }}-linux-x86_64
+
+      - name: Download Godot
+        if: steps.godot-cache.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p ~/godot-bin
+          archive="Godot_v${GODOT_VERSION}_linux.x86_64"
+          url="https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/${archive}.zip"
+          curl -fsSL -o /tmp/godot.zip "$url"
+          unzip -q -o /tmp/godot.zip -d /tmp/godot
+          mv "/tmp/godot/${archive}" ~/godot-bin/godot
+          chmod +x ~/godot-bin/godot
+
+      - name: Report Godot version
+        shell: bash
+        run: |
+          echo "$HOME/godot-bin" >> "$GITHUB_PATH"
+          ~/godot-bin/godot --version
+
+      # Import must run first and on its own: it generates the .godot/ cache and
+      # the global class-name registry that the test scripts resolve against.
+      - name: Import project resources
+        shell: bash
+        run: godot --headless --import 2>&1 | tee /tmp/import.log
+
+      - name: Fail on import errors
+        shell: bash
+        run: |
+          if grep -qE '^(SCRIPT )?ERROR:' /tmp/import.log; then
+            echo "Import reported errors:"
+            grep -nE '^(SCRIPT )?ERROR:' /tmp/import.log
+            exit 1
+          fi
+
+      # Runs as a scene, not via --script: a MainLoop script is compiled before
+      # the autoload singletons exist, so classes naming EventBus or RNGService
+      # would fail to compile and every service would silently be null.
+      - name: Run tests
+        shell: bash
+        run: godot --headless --path . res://tests/test_runner.tscn

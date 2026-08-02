@@ -1,0 +1,42 @@
+[gd_scene load_steps=2 format=3 uid="uid://bnnresult00001"]
+
+[ext_resource type="Script" path="res://ui/result_screen.gd" id="1_result"]
+
+[node name="ResultScreen" type="CanvasLayer"]
+layer = 6
+script = ExtResource("1_result")
+
+[node name="Root" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="Root"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.058, 0.047, 0.07, 0.88)
+
+[node name="Title" type="Label" parent="Root"]
+offset_left = 120.0
+offset_top = 86.0
+offset_right = 520.0
+offset_bottom = 118.0
+theme_override_font_sizes/font_size = 20
+text = "DEATH"
+horizontal_alignment = 1
+
+[node name="Summary" type="Label" parent="Root"]
+offset_left = 120.0
+offset_top = 132.0
+offset_right = 520.0
+offset_bottom = 232.0
+theme_override_colors/font_color = Color(0.769, 0.722, 0.604, 1)
+theme_override_font_sizes/font_size = 11
+horizontal_alignment = 1
+
+[node name="Restart" type="Button" parent="Root"]
+offset_left = 258.0
+offset_top = 246.0
+offset_right = 382.0
+offset_bottom = 272.0
+theme_override_font_sizes/font_size = 11
+text = "Restart  (R)"

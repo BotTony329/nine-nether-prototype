@@ -1,0 +1,47 @@
+[gd_scene load_steps=2 format=3 uid="uid://bnndebugpanel1"]
+
+[ext_resource type="Script" path="res://ui/debug_panel.gd" id="1_debug"]
+
+[node name="DebugPanel" type="CanvasLayer"]
+layer = 8
+script = ExtResource("1_debug")
+
+[node name="Root" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Panel" type="Panel" parent="Root"]
+offset_left = 396.0
+offset_top = 46.0
+offset_right = 636.0
+offset_bottom = 322.0
+modulate = Color(1, 1, 1, 0.88)
+mouse_filter = 2
+
+[node name="Readout" type="Label" parent="Root/Panel"]
+offset_left = 6.0
+offset_top = 4.0
+offset_right = 234.0
+offset_bottom = 224.0
+theme_override_colors/font_color = Color(0.769, 0.722, 0.604, 1)
+theme_override_font_sizes/font_size = 9
+text = "debug"
+
+[node name="Log" type="Label" parent="Root/Panel"]
+offset_left = 6.0
+offset_top = 228.0
+offset_right = 234.0
+offset_bottom = 272.0
+theme_override_colors/font_color = Color(0.706, 0.392, 0.118, 1)
+theme_override_font_sizes/font_size = 9
+autowrap_mode = 2
+
+[node name="Keys" type="Label" parent="Root"]
+offset_left = 6.0
+offset_top = 330.0
+offset_right = 636.0
+offset_bottom = 356.0
+theme_override_colors/font_color = Color(0.463, 0.451, 0.416, 1)
+theme_override_font_sizes/font_size = 9
+text = "A/D move   Space jump   J attack   |   F1 debug  F2 heal  F3 hurt  F4 enemy  F5 boss  F6 preview  F7 apply  F8 boxes  R restart"

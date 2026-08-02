@@ -1,0 +1,44 @@
+[gd_scene load_steps=7 format=3 uid="uid://bnnenemybase01"]
+
+[ext_resource type="Script" path="res://actors/enemies/enemy_base.gd" id="1_enemy"]
+[ext_resource type="Script" path="res://core/hurtbox.gd" id="2_hurtbox"]
+[ext_resource type="Script" path="res://core/hitbox.gd" id="3_hitbox"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(14, 26)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hurt"]
+size = Vector2(18, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hit"]
+size = Vector2(26, 20)
+
+[node name="EnemyBase" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1_enemy")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -24)
+
+[node name="Body" type="CollisionShape2D" parent="."]
+position = Vector2(0, -13)
+shape = SubResource("RectangleShape2D_body")
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("2_hurtbox")
+
+[node name="Shape" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, -14)
+shape = SubResource("RectangleShape2D_hurt")
+
+[node name="AttackHitbox" type="Area2D" parent="."]
+collision_layer = 64
+collision_mask = 8
+script = ExtResource("3_hitbox")
+
+[node name="Shape" type="CollisionShape2D" parent="AttackHitbox"]
+position = Vector2(20, -14)
+shape = SubResource("RectangleShape2D_hit")
