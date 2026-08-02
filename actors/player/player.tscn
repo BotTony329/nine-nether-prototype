@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3 uid="uid://bnnplayer0001"]
+
+[ext_resource type="Script" path="res://actors/player/player.gd" id="1_player"]
+[ext_resource type="SpriteFrames" path="res://actors/player/player_frames.tres" id="2_frames"]
+[ext_resource type="Script" path="res://core/hurtbox.gd" id="3_hurtbox"]
+[ext_resource type="Script" path="res://core/hitbox.gd" id="4_hitbox"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(14, 26)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hurt"]
+size = Vector2(16, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hit"]
+size = Vector2(24, 20)
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_player")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -24)
+sprite_frames = ExtResource("2_frames")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="Body" type="CollisionShape2D" parent="."]
+position = Vector2(0, -13)
+shape = SubResource("RectangleShape2D_body")
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("3_hurtbox")
+
+[node name="Shape" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, -14)
+shape = SubResource("RectangleShape2D_hurt")
+
+[node name="AttackHitbox" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 16
+script = ExtResource("4_hitbox")
+
+[node name="Shape" type="CollisionShape2D" parent="AttackHitbox"]
+position = Vector2(18, -14)
+shape = SubResource("RectangleShape2D_hit")
+
+[node name="Camera" type="Camera2D" parent="."]
+position = Vector2(0, -24)
+position_smoothing_enabled = true
+position_smoothing_speed = 6.0
