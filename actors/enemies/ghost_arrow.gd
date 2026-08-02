@@ -19,6 +19,10 @@ var _configured: bool = false
 func _ready() -> void:
 	area_entered.connect(_on_area_entered)
 	body_entered.connect(_on_body_entered)
+	var visual := get_node_or_null(^"Visual") as Sprite2D
+	var fallback := get_node_or_null(^"FallbackVisual") as CanvasItem
+	if fallback != null:
+		fallback.visible = visual == null or visual.texture == null
 
 
 func configure(
@@ -52,6 +56,11 @@ func _physics_process(delta: float) -> void:
 
 func has_impacted() -> bool:
 	return _has_impacted
+
+
+func uses_v2_texture() -> bool:
+	var visual := get_node_or_null(^"Visual") as Sprite2D
+	return visual != null and visual.texture != null
 
 
 func _on_area_entered(area: Area2D) -> void:

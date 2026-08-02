@@ -12,4 +12,4 @@ retreat_distance = 92.0
 projectile_scene = ExtResource("2_projectile")
 projectile_speed = 190.0
 projectile_lifetime = 2.4
-projectile_spawn_offset = Vector2(18, -22)
+projectile_spawn_offset = Vector2(24, -48)

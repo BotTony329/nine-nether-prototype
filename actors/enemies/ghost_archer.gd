@@ -10,6 +10,7 @@ signal arrow_fired(arrow: GhostArrow)
 
 var _patrol_origin_x: float
 var _patrol_direction: int = 1
+var _arrow_released: bool = false
 
 
 func _ready() -> void:
@@ -25,10 +26,28 @@ func initialize(enemy_config: EnemyConfig, target: Node2D) -> void:
 
 
 func _enter_state(next: int) -> void:
-	super._enter_state(next)
-	if next == State.ATTACK:
-		attack_hitbox.set_active(false)
-		_shoot()
+	attack_hitbox.set_active(false)
+	match next:
+		State.IDLE:
+			sprite.play(&"ghost_archer_idle")
+		State.CHASE:
+			sprite.play(&"ghost_archer_retreat")
+		State.WINDUP:
+			sprite.modulate = Color.WHITE
+			sprite.play(&"ghost_archer_aim")
+			sprite.frame = 0
+		State.ATTACK:
+			_arrow_released = false
+			sprite.play(&"ghost_archer_shoot")
+			sprite.frame = 0
+		State.RECOVER:
+			pass
+		State.HURT:
+			sprite.play(&"ghost_archer_hurt")
+			sprite.frame = 0
+		State.DEAD:
+			sprite.play(&"ghost_archer_death")
+			sprite.frame = 0
 
 
 func _update_state(delta: float) -> void:
@@ -42,11 +61,17 @@ func _update_state(delta: float) -> void:
 		State.WINDUP:
 			_decelerate(delta)
 			_face_target()
-			if _state_elapsed >= config.attack_windup:
+			# frame_map.json: the bow is fully drawn on aim frame 5.
+			if sprite.frame >= 5 or not sprite.is_playing():
 				change_state(State.ATTACK)
 		State.ATTACK:
 			_decelerate(delta)
-			if _state_elapsed >= config.attack_active:
+			_face_target()
+			# frame_map.json: release exactly on shoot frame 1.
+			if not _arrow_released and sprite.frame >= 1:
+				_arrow_released = true
+				_shoot()
+			if not sprite.is_playing():
 				change_state(State.RECOVER)
 		State.RECOVER:
 			_decelerate(delta)
