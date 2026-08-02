@@ -6,7 +6,7 @@ Update status and PR only when work actually begins.
 
 | ID | Task | Owner | Status | Branch | Dependency | PR |
 | --- | --- | --- | --- | --- | --- | --- |
-| M15 | V2 character, enemy, Boss, projectile, effect, and HUD integration | Codex | Done; PR pending | `codex/m15-art-v2-integration` | M1 + X02 | Pending |
+| M15 | V2 character, enemy, Boss, projectile, effect, and HUD integration | Codex | In review | `codex/m15-art-v2-integration` | M1 + X02 | #6 |
 
 M1.5 maps only existing gameplay actions. It does not add player attacks, Boss
 phases, or a parallel combat/animation framework. See

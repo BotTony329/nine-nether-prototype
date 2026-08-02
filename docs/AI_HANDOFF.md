@@ -1,7 +1,7 @@
 # AI Handoff
 
 - **Current branch:** `codex/m15-art-v2-integration`
-- **Current phase:** M1.5 Art V2 integrated; review/CI pending
+- **Current phase:** M1.5 Art V2 integrated; draft PR #6 open for review
 - **Next owner:** Claude and Game Director for visual/gameplay review
 - **Last updated:** 2026-08-02 (Australia/Melbourne)
 
