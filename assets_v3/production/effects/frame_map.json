@@ -1,0 +1,44 @@
+{
+  "effects": {
+    "slash": {
+      "frame_size": [
+        96,
+        64
+      ],
+      "frames": 4,
+      "fps": 12
+    },
+    "hit": {
+      "frame_size": [
+        64,
+        64
+      ],
+      "frames": 4,
+      "fps": 16
+    },
+    "blood": {
+      "frame_size": [
+        96,
+        64
+      ],
+      "frames": 4,
+      "fps": 14
+    },
+    "ghost_fire": {
+      "frame_size": [
+        64,
+        64
+      ],
+      "frames": 6,
+      "fps": 10
+    },
+    "death": {
+      "frame_size": [
+        64,
+        80
+      ],
+      "frames": 6,
+      "fps": 10
+    }
+  }
+}

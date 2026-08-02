@@ -1,0 +1,44 @@
+{
+  "character": "ghost_melee",
+  "frame_size": [
+    192,
+    160
+  ],
+  "pivot": [
+    96,
+    150
+  ],
+  "foot_position": [
+    96,
+    150
+  ],
+  "animations": {
+    "idle": {
+      "frames": 4,
+      "fps": 6,
+      "loop": true
+    },
+    "walk": {
+      "frames": 6,
+      "fps": 9,
+      "loop": true
+    },
+    "attack": {
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "hit_frame": 2,
+      "recovery_frame": 3
+    },
+    "hurt": {
+      "frames": 2,
+      "fps": 8,
+      "loop": false
+    },
+    "death": {
+      "frames": 4,
+      "fps": 7,
+      "loop": false
+    }
+  }
+}
