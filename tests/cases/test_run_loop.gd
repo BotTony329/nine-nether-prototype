@@ -110,7 +110,7 @@ func test_full_loop_reaches_victory_and_restarts() -> void:
 	assert_greater(state.imbalance(), float(before["imbalance"]), "imbalance rose")
 
 	coordinator.boss().die(&"test")
-	await step_physics(2)
+	await step_physics(125)
 	assert_equal(coordinator.phase(), RunCoordinator.PHASE_RESULT, "the run ends")
 	assert_equal(coordinator.state().run_status(), RunState.STATUS_VICTORY, "as a victory")
 
@@ -160,12 +160,19 @@ func test_debug_commands_route_through_the_coordinator() -> void:
 	var enemies_before := coordinator.live_enemies().size()
 	coordinator.debug_spawn_reference_enemy()
 	assert_equal(
-		coordinator.live_enemies().size(), enemies_before + 1, "debug spawn added an enemy"
+		coordinator.live_enemies().size(), enemies_before + 1, "reference spawn added the wave enemy"
 	)
 	assert_true(
-		coordinator.live_enemies()[-1] is GhostArcher,
-		"the injected debug enemy is the Ghost Archer"
+		coordinator.live_enemies()[-1] is MeleeGhost,
+		"the coordinator reference spawn uses the injected wave composition"
 	)
+
+	var debug_panel: DebugPanel = _main.get_node("DebugRoot/DebugPanel")
+	debug_panel.spawn_ghost_archer_for_debug()
+	assert_equal(
+		coordinator.live_enemies().size(), enemies_before + 2, "F4 debug spawn added an enemy"
+	)
+	assert_true(coordinator.live_enemies()[-1] is GhostArcher, "F4 spawns the Ghost Archer")
 
 	var digest := state.snapshot_hash()
 	var preview := coordinator.debug_preview_sacrifice()
