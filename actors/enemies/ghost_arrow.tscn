@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://actors/enemies/ghost_arrow.gd" id="1_arrow"]
+[ext_resource type="Texture2D" path="res://assets_v2/projectiles/ghost_fire_arrow.png" id="2_arrow_texture"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_arrow"]
 radius = 2.0
@@ -11,9 +12,13 @@ collision_layer = 64
 collision_mask = 9
 script = ExtResource("1_arrow")
 
+[node name="Visual" type="Sprite2D" parent="."]
+texture = ExtResource("2_arrow_texture")
+
 [node name="FallbackVisual" type="Polygon2D" parent="."]
 polygon = PackedVector2Array(-7, -1, 4, -1, 4, -3, 8, 0, 4, 3, 4, 1, -7, 1)
 color = Color(0.31, 0.88, 0.65, 0.9)
+visible = false
 
 [node name="Shape" type="CollisionShape2D" parent="."]
 rotation = 1.5708

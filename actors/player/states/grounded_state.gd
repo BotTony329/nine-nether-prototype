@@ -6,7 +6,7 @@ func id() -> StringName:
 	return GROUNDED
 
 func enter() -> void:
-	player.play(&"idle")
+	player.play(&"player_idle")
 
 func physics_update(delta: float) -> StringName:
 	player.apply_gravity(delta)
@@ -20,5 +20,5 @@ func physics_update(delta: float) -> StringName:
 	if not player.is_on_floor():
 		return AIRBORNE
 
-	player.play(&"run" if player.input_direction() != 0 else &"idle")
+	player.play(&"player_run" if player.input_direction() != 0 else &"player_idle")
 	return &""

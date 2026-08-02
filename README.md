@@ -58,6 +58,9 @@ Product first, then implementation:
 5. [AI handoff](docs/AI_HANDOFF.md) — current state, known issues, next tasks
 6. [Contributor rules](AGENTS.md) and [GitHub workflow](docs/GITHUB_WORKFLOW.md)
 
-Art assets are governed by [docs/ART_SPEC.md](docs/ART_SPEC.md). All sprites are placeholders, marked with a magenta border.
+The playable actors, projectile, combat effects, and matching HUD fields use the
+production Art V2 pack. The legacy placeholder set remains as source material
+for modules not yet integrated; see
+[docs/ART_V2_INTEGRATION_REPORT.md](docs/ART_V2_INTEGRATION_REPORT.md).
 
 This repository is a greybox prototype, not a finished or publicly supported game.
