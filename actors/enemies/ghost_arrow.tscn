@@ -16,6 +16,11 @@ script = ExtResource("1_arrow")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_visual")
 
+[node name="FallbackVisual" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-7, -1, 4, -1, 4, -3, 8, 0, 4, 3, 4, 1, -7, 1)
+color = Color(0.31, 0.88, 0.65, 0.9)
+visible = false
+
 [node name="Shape" type="CollisionShape2D" parent="."]
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_arrow")

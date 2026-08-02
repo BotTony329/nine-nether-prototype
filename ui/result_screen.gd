@@ -22,6 +22,14 @@ func _ready() -> void:
 func show_outcome(outcome: StringName) -> void:
 	var state := _coordinator.state()
 	var victory := outcome == RunState.STATUS_VICTORY
+	if not victory:
+		var player := _coordinator.player()
+		if (
+			player != null
+			and player.sprite.animation == &"player_death"
+			and player.sprite.is_playing()
+		):
+			await player.sprite.animation_finished
 	# Not 同归: the same-death mechanic is not implemented in M1, so a win here
 	# is an ordinary victory and the screen must not claim otherwise.
 	_title.text = "VICTORY" if victory else "DEATH"

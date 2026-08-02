@@ -105,6 +105,8 @@ func test_boss_death_publishes_its_own_events_once() -> void:
 
 	boss.receive_damage(_blow(boss, 9999.0))
 	boss.die(&"test")
+	assert_equal(defeated[0], 0, "victory waits while the collapse animation plays")
+	await step_physics(125)
 
 	EventBus.boss_died.disconnect(handler)
 	assert_equal(defeated[0], 1, "defeated fired once")

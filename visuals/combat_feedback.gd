@@ -50,7 +50,6 @@ func _on_hit(payload: Dictionary) -> void:
 	if target == null:
 		return
 	var point := target.global_position + Vector2(0.0, -18.0)
-	_spawn_effect(&"slash", point + Vector2(-8.0, 0.0), 0.52)
 	_spawn_effect(&"hit", point, 0.52)
 	_spawn_effect(&"blood", point + Vector2(5.0, 2.0), 0.42)
 	_spawn_damage_number(point, float(payload["final_damage"]), bool(payload.get("is_critical", false)))
@@ -61,13 +60,13 @@ func _on_hit(payload: Dictionary) -> void:
 
 func _on_death(payload: Dictionary) -> void:
 	var actor := _find_actor(StringName(payload.get("actor_id", &"unknown")))
-	if actor != null:
+	if actor != null and actor.get_node_or_null(^"DeathEffect") == null:
 		_spawn_effect(&"death", actor.global_position + Vector2(0.0, -16.0), 0.62)
 
 
 func _on_player_death(_payload: Dictionary) -> void:
 	var player := _find_actor(&"player")
-	if player != null:
+	if player != null and player.get_node_or_null(^"DeathEffect") == null:
 		_spawn_effect(&"death", player.global_position + Vector2(0.0, -16.0), 0.62)
 
 

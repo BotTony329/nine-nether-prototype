@@ -5,27 +5,27 @@ extends TestCase
 const ACTORS := {
 	"player": {
 		"scene": "res://actors/player/player.tscn",
-		"frames": "res://actors/player/player_frames.tres",
+		"frames": "res://assets_v2/godot/player_frames.tres",
 		"map": "res://assets_v3/production/player/frame_map.json",
-		"counts": {&"idle": 4, &"run": 6, &"jump": 2, &"attack": 4, &"hurt": 2, &"death": 6},
+		"counts": {&"player_idle": 4, &"player_run": 6, &"player_jump": 2, &"player_fall": 2, &"player_light_attack_1": 8, &"player_hurt": 2, &"player_death": 6},
 	},
 	"ghost_melee": {
 		"scene": "res://actors/enemies/ghost_melee.tscn",
-		"frames": "res://actors/enemies/ghost_melee_frames.tres",
+		"frames": "res://assets_v2/godot/melee_ghost_frames.tres",
 		"map": "res://assets_v3/production/ghost_melee/frame_map.json",
-		"counts": {&"idle": 4, &"run": 6, &"attack": 4, &"hurt": 2, &"death": 4},
+		"counts": {&"melee_ghost_idle": 4, &"melee_ghost_walk": 6, &"melee_ghost_attack": 8, &"melee_ghost_hurt": 2, &"melee_ghost_death": 4},
 	},
 	"ghost_archer": {
 		"scene": "res://actors/enemies/ghost_archer.tscn",
-		"frames": "res://actors/enemies/ghost_archer_frames.tres",
+		"frames": "res://assets_v2/godot/ghost_archer_frames.tres",
 		"map": "res://assets_v3/production/ghost_archer/frame_map.json",
-		"counts": {&"idle": 4, &"run": 6, &"attack": 4, &"hurt": 2, &"death": 4},
+		"counts": {&"ghost_archer_idle": 4, &"ghost_archer_retreat": 6, &"ghost_archer_aim": 6, &"ghost_archer_shoot": 4, &"ghost_archer_hurt": 2, &"ghost_archer_death": 4},
 	},
 	"gate_warden": {
 		"scene": "res://actors/boss/boss.tscn",
-		"frames": "res://actors/boss/boss_frames.tres",
+		"frames": "res://assets_v2/godot/gate_warden_frames.tres",
 		"map": "res://assets_v3/production/gate_warden/frame_map.json",
-		"counts": {&"idle": 4, &"run": 6, &"attack": 5, &"hurt": 2, &"death": 8},
+		"counts": {&"gate_warden_idle": 4, &"gate_warden_walk": 6, &"gate_warden_attack_1": 10, &"gate_warden_hurt": 2, &"gate_warden_death": 8},
 	},
 }
 
@@ -43,6 +43,8 @@ func test_actor_frame_maps_match_sprite_resources() -> void:
 			assert_equal(frames.get_frame_count(animation), spec["counts"][animation], "%s %s frame count" % [actor_name, animation])
 			var texture := frames.get_frame_texture(animation, 0)
 			assert_equal(texture.get_size(), Vector2(frame_size), "%s %s uses declared frame size" % [actor_name, animation])
+			assert_true(texture is AtlasTexture, "%s %s uses an atlas frame" % [actor_name, animation])
+			assert_true((texture as AtlasTexture).atlas.resource_path.begins_with("res://assets_v3/production/"), "%s %s resolves to V3 art" % [actor_name, animation])
 
 
 func test_declared_foot_positions_land_on_actor_origins() -> void:
@@ -96,7 +98,8 @@ func test_production_pngs_are_rgba_and_have_transparent_margins() -> void:
 
 func test_live_scenes_reference_v3_production_art() -> void:
 	var arrow := (load("res://actors/enemies/ghost_arrow.tscn") as PackedScene).instantiate()
-	assert_null(arrow.get_node_or_null("FallbackVisual"), "polygon arrow placeholder removed")
+	assert_not_null(arrow.get_node_or_null("FallbackVisual"), "develop emergency fallback remains available")
+	assert_false((arrow.get_node("FallbackVisual") as CanvasItem).visible, "polygon arrow fallback is hidden")
 	var arrow_visual := arrow.get_node("Visual") as Sprite2D
 	assert_true(arrow_visual.texture.resource_path.begins_with("res://assets_v3/production/"), "arrow uses V3 texture")
 	arrow.free()
@@ -107,6 +110,14 @@ func test_live_scenes_reference_v3_production_art() -> void:
 		assert_true(visual.texture.resource_path.begins_with("res://assets_v3/production/"), "%s uses V3 texture" % node_path)
 	assert_not_null(arena.get_node_or_null("Props/GhostFireLeft"), "V3 ghost fire is present")
 	arena.free()
+
+	var main := (load("res://scenes/main.tscn") as PackedScene).instantiate()
+	assert_not_null(main.get_node_or_null("CombatFeedback"), "one V3 combat-feedback observer is present")
+	assert_null(main.get_node_or_null("CombatEffects"), "legacy hit observer is not duplicated")
+	var hud := main.get_node("UIRoot/Hud")
+	assert_true((hud.get_node("Player/Icon") as TextureRect).texture.resource_path.begins_with("res://assets_v3/production/"), "player HUD uses V3 HP icon")
+	assert_true((hud.get_node("Boss/Icon") as TextureRect).texture.resource_path.begins_with("res://assets_v3/production/"), "Boss HUD uses V3 icon")
+	main.free()
 
 
 func _read_json(path: String) -> Dictionary:

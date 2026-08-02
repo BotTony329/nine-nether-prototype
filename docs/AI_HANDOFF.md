@@ -1,180 +1,119 @@
 # AI Handoff
 
 - **Current branch:** `codex/production-asset-sprint-01`
-- **Current phase:** Approved Art V3 production assets integrated into the playable M1 framework
-- **Next owner:** Art Director and Game Director for visual review
+- **Current phase:** Art V3 production assets integrated on the latest `develop`
+- **Next owner:** Game Director for Draft PR #8 review
 - **Last updated:** 2026-08-02 (Australia/Melbourne)
 
----
+## Playable status
 
-## M1 playable status
+The complete M1 loop remains playable: arena wave → sacrifice → Gate Warden →
+victory/defeat → restart. Normal gameplay now renders the approved Art V3
+player, melee ghost, Ghost Archer, Ghost Arrow, Gate Warden, environment,
+combat effects, and primary HUD icons. Develop's gameplay architecture,
+authored attack timing, collision geometry, and additional HUD statistics are
+preserved. Debug collision shapes remain off by default and available on F8.
 
-**Playable end to end.** Launch → arena → move, jump, attack → clear a wave of
-three ghost soldiers → preview and accept one sacrifice → become measurably
-sharper and structurally weaker → fight the prototype Boss → victory or death →
-restart.
+## Art V3 production integration
 
-Verified by the automated run-loop case and by capturing frames under a virtual
-display during development. Current local validation: Godot 4.7.1 stable;
-project compatibility and CI remain Godot 4.3.
+The V3 production strips are mapped into develop's established animation names
+and frame-event contracts. Where a four- or five-pose approved strip is shorter
+than develop's authored timing map, source poses are deliberately held across
+multiple frames; this preserves startup, active, release, and recovery events
+without changing gameplay scripts. Scene-local sprite position and scale keep
+each declared V3 foot position on the stable actor origin. Combat feedback uses
+the V3 slash, hit, blood, and death sheets, while damage remains exclusively in
+`CombatResolver`.
 
-## Art V3 production sprint
+The merge with current `develop` retained its player, melee ghost, Ghost Archer,
+Boss, HUD, result-flow, and debug integration. The hidden Ghost Arrow polygon is
+kept only as develop's emergency fallback; normal rendering uses the V3 arrow.
+See `docs/PRODUCTION_ASSET_REPLACEMENT.md` and the V3 production `frame_map.json`
+files for the replacement inventory and metadata.
 
-The approved `assets_v3/review/` lineup is now represented by production-ready
-Player, Ghost Melee, Ghost Archer, and mounted Gate Warden animation strips.
-Environment tiles, gate, fog, Ghost Arrow, combat effects, and the three live
-HUD icons were also replaced. Runtime presentation observes `EventBus` for
-damage numbers, slash/hit/blood/death feedback, hit flash, small camera shake,
-and small hit stop; it does not alter the frozen damage or state architecture.
+## M1.5 integration
 
-Exact file mapping, frame metadata, scene-local foot alignment, screenshots,
-known fallbacks, and remaining placeholders are recorded in
-`docs/PRODUCTION_ASSET_REPLACEMENT.md`.
-
-## Implemented systems
-
-| System | State |
+| Area | Integrated mapping |
 | --- | --- |
-| `RunState` | Authoritative; private fields, named commands, snapshot/restore/clone/hash |
-| `CombatResolver` | Single damage path, bucket order frozen, breakdown reported |
-| `IntegrityService` | Five-component structural formula; momentary state excluded |
-| `SacrificeService` | Shared preview/apply transaction with whole-state rollback |
-| `EventBus` | 11 signals with a uniform correlation envelope |
-| `RNGService` | Per-subsystem streams derived from the run seed |
-| `BalanceConfig` | Every tunable number, in `data/balance_config.tres` |
-| Player | Move, jump, light attack, hit reaction, death, restart, camera follow, 5-state machine |
-| `EnemyBase` | Detect, approach, telegraphed wind-up, attack, recovery, hurt, idempotent death |
-| Reference enemy | 鬼卒 Ghost Soldier at X01 timings |
-| Ghost Archer (X02) | Patrol, detect, maintain range, retreat, aim, shoot, cooldown, hurt and death |
-| Ghost Arrow (X02) | Fixed trajectory, one hit, owner exclusion, impact/timeout cleanup, CombatResolver path |
-| `BossActor` | Extends `EnemyBase`; idle, chase, one telegraphed melee attack, health bar, victory |
-| Arena | One fixed 1024×360 space, collision, spawns, parallax, camera bounds |
-| UI | HUD, sacrifice preview/confirm, death and victory screens, restart |
-| Debug | Panel plus 9 commands, all routed through `RunCoordinator` |
-| Tests + CI | 64 tests / 438 assertions; `godot-tests` workflow |
+| Player | idle, run, jump, fall, light attack 1, hurt, death |
+| Melee ghost | idle, walk, attack, hurt, death |
+| Ghost Archer | idle, retreat, aim, shoot, hurt, death |
+| Ghost Arrow | supplied 32×32 projectile texture; hidden emergency fallback |
+| Gate Warden | idle, walk, attack 1, hurt, death |
+| Effects | blade slash, confirmed hit, post-animation death dissolve |
+| HUD | HP, stamina, attack, integrity/Boss, imbalance, sacrifice icons |
+
+Animation frames are authoritative only for presentation and for gating the
+existing attack flow. Player and melee active frames are 4–5; Gate Warden active
+frames are 4–5; Ghost Archer releases exactly once on shoot frame 1 after aim
+reaches full draw at frame 5. Damage calculation remains entirely in
+`CombatResolver`. Player defeat UI and Boss victory wait for their respective
+death strips to complete.
+
+See `docs/ART_V2_INTEGRATION_REPORT.md` for the full asset inventory, dimensions,
+frame rates, pivots, foot positions, timing windows, fallbacks, and unused art.
+
+## Architecture compliance
+
+No frozen framework interface changed. In particular, this work leaves
+`RunState`, `CombatResolver`, `DamageContext`, `DamageResult`,
+`IntegrityService`, `SacrificeService`, `EventBus`, `RNGService`,
+`RunCoordinator`, `EnemyBase`, the player controller/state-machine foundation,
+and the Hitbox/Hurtbox pipeline unchanged. The V2 adapters live in concrete
+actor/state scripts and scenes.
+
+## Notable files
+
+### Added
+
+- `actors/enemies/melee_ghost.gd`
+- `visuals/player_slash_visual.gd`
+- `visuals/death_effect.gd`
+- `visuals/one_shot_sprite.gd`
+- `visuals/combat_effects.gd`
+- `tests/cases/test_art_v2.gd`
+- `docs/ART_V2_INTEGRATION_REPORT.md`
+
+### Updated
+
+- Existing player, melee ghost, Ghost Archer/Arrow, and Boss scenes/scripts
+- Concrete player state scripts for animation selection and hitbox frame gating
+- Existing actor configuration resources for authored strip durations
+- Main composition, HUD, sacrifice panel, debug panel, and result screen
+- Actor, Ghost Archer, and end-to-end run-loop tests
+
+## Tests
+
+- **Local:** 71 tests, 686 assertions, 0 failures
+- **Engine:** Godot 4.7.1 stable headless locally; CI remains pinned to 4.3
+- **Commands:**
+  - `godot --headless --import`
+  - `godot --headless --path . res://tests/test_runner.tscn`
+
+Coverage added for V2 resource/scene loading, all required player mappings,
+player/melee/Boss active frames, Archer release timing, hurt/death overrides,
+Boss victory deferral, no post-death release, and debug-overlay defaults.
+
+Visual evidence is stored in `assets_v2/review/integration_*.png`: idle, run,
+jump, player active-frame hitbox, Archer aim/arrow, and Boss attack/death. Godot
+rendered the live main scene at 640×360. The environment's interactive macOS
+control service and MP4 conversion were unavailable, so no preview video was
+added.
+
+## Known limitations and next work
+
+1. Only actions already present in gameplay are mapped. Player light attack 2,
+   heavy attack, and Gate Warden attack 2 remain unused.
+2. Corpse Beast art remains reserved for X03.
+3. The Ghost Arrow polygon remains hidden as an emergency load-failure fallback.
+4. Combat has no audio; audio integration remains outside M1.5 scope.
+5. X04 now has a second supplied attack strip, but still depends on the Boss
+   `PhaseController` / `AttackScheduler` foundation and an approved move design.
 
 ## Frozen interfaces
 
-See `docs/INTERFACES.md` section 1 for signatures and guarantees.
+See `docs/INTERFACES.md` section 1. Changes require an ADR and Claude review.
 
 `RunState` · `DamageContext` / `DamageResult` / `CombatResolver` ·
-`IntegrityService` · `SacrificeDefinition` · `SacrificeService` ·
-the Damageable shape (`actor_id` / `armour` / `current_hp` / `receive_damage`) ·
+`IntegrityService` · `SacrificeDefinition` · `SacrificeService` · Damageable ·
 `EnemyBase` · `EventBus` · `RNGService` · `RunCoordinator` · `Hitbox` / `Hurtbox`
-
-Changing any of them requires a `docs/DECISIONS.md` proposal and Claude review.
-
-## Files Codex must not modify
-
-```
-core/run_state.gd               core/combat_resolver.gd
-core/damage_context.gd          core/damage_result.gd
-core/soft_caps.gd               core/derived_stats.gd
-core/event_bus.gd               core/rng_service.gd
-core/game_data.gd               core/hitbox.gd             core/hurtbox.gd
-systems/integrity_service.gd    systems/sacrifice_service.gd
-systems/sacrifice_definition.gd systems/sacrifice_result.gd
-systems/run_coordinator.gd
-actors/enemies/enemy_base.gd    actors/enemies/enemy_base.tscn
-actors/enemies/enemy_config.gd
-actors/player/player.gd         actors/player/player_state_machine.gd
-actors/player/states/player_state.gd
-scenes/main.gd                  project.godot
-.github/workflows/repository-validation.yml
-```
-
-Also unchanged without their owner: product requirements (Game Director) and
-`docs/art/CONCEPT_*.md` (Art Director).
-
-## Available Codex tasks
-
-All interfaces these depend on are now frozen. See `docs/TASKS/README.md`.
-
-| ID | Task | Depends on | Notes |
-| --- | --- | --- | --- |
-| X01 | Melee ghost, full behaviour | `EnemyBase` | The reference enemy is a starting point, not the finished X01 |
-| X02 | Ghost Archer | `EnemyBase` | **Done on `codex/x02-ghost-archer`; pending review** |
-| X03 | Charger ghost | `EnemyBase` | Art present: `corpse_beast_*` at 64×48 — needs its own collider sizes |
-| X04 | Boss attack pack | `BossActor` | Blocked on art or a ruling — see gaps below |
-| X05 | Sacrifice selection UI | `SacrificeService` | Three A/B/C slots; preview through the service, confirm through the coordinator |
-| X06 | Twelve sacrifice definitions | `SacrificeDefinition` | Data only. S4/S5 cards need at least one rule-type cost |
-| X07 | Debug and telemetry panel | `EventBus`, `RunCoordinator` | Event timeline and JSON/CSV export; the current panel is the baseline |
-| X08 | Test expansion | harness | Stamina/dodge and same-death cases once those systems exist |
-
-Not yet unblocked, because Claude has not built the framework they extend: the
-three-slot generator, `StaminaService`, `SameDeathController`, the world
-director, and the Boss `PhaseController`.
-
-## Known issues
-
-1. **The old `assets/effects/*.png` remain archival.** Live M1 combat feedback
-   now uses the animated Art V3 effects under `assets_v3/production/effects/`.
-2. **The Boss has one attack.** `assets/boss/` ships one attack sheet, so the
-   charge and the ground slam from A14/X04 are absent (ADR-010). The fight is a
-   readable pattern with one answer — thin on purpose, not by oversight.
-3. **`docs/PRD.md` and `docs/PROTOTYPE_CONTRACT.md` are still stubs.** M1 was
-   derived from the Development Pack and research report under ADR-001. Land the
-   real documents before Codex starts, so X01–X08 have something to be reviewed
-   against.
-4. **Stamina has no consumer** (ADR-011). The bar sits full during normal play.
-5. **Imbalance is tracked but inert.** Nothing reads it yet; the world director
-   is the consumer.
-6. **No telemetry persistence.** Events are emitted with a correlation envelope
-   but nothing writes them to disk (X07).
-7. **No audio.** Out of scope for M1.
-8. **Some presentation remains pre-V3.** Deep/tree/chain parallax layers and
-   health/stamina bar frames remain by Sprint 01 scope; see the replacement
-   matrix for the bounded Sprint 02 recommendation.
-9. **Player jump uses an idle-frame fallback.** No jump/fall production set was
-   authored because the approved Sprint 01 animation list contained only idle,
-   walk, attack, hurt, and death.
-
-## Test status
-
-- **Last successful run:** 2026-08-02 — 64 tests, 438 assertions, 0 failures,
-  Godot 4.7.1 stable headless locally. Existing CI remains pinned to Godot 4.3.
-- **Command:** `godot --headless --import` then
-  `godot --headless --path . res://tests/test_runner.tscn`
-- **CI:** `repository-validation` (unchanged) and `godot-tests` (new). Both
-  should be required checks on `develop`.
-
-## Asset integration gaps
-
-| Asset group | Status |
-| --- | --- |
-| `assets/player/` | All 6 sheets used; dimensions match `docs/ART_SPEC.md` exactly |
-| `assets/enemy/ghost_melee_*` | All 5 sheets used |
-| `assets/enemy/ghost_archer_*` | All 5 sheets used by X02 |
-| `assets/enemy/corpse_beast_*` | Verified, unused — X03 |
-| `assets/boss/` | idle, run, attack, hurt, death used; only one attack sheet exists |
-| `assets/tiles/` | floor, stone_brick, brazier, tombstone used; `tile_wall`, `tile_wood_bridge`, `tile_ground_spike` unused (no platforms or hazards in M1) |
-| `assets/background/` | bg_deep, bg_tree, bg_broken_flag, bg_chains all used in three parallax layers |
-| `assets/ui/` | ui_health_bar, ui_stamina_bar used; `ui_frame`, `ui_minimap_frame` unused (no inventory, no minimap) |
-| `assets/icons/ui/` | icon_hp, icon_boss, icon_sacrifice used; the other 8 unused |
-| `assets/icons/weapons/` | All 6 unused — no weapon system in M1 |
-| `assets/effects/` | **Unusable as animations** — see known issue 1 |
-
-Nothing was stretched, scaled by a non-integer factor, or resized. Regenerate
-`SpriteFrames` with `python3 tools/generate_sprite_frames.py` after replacing a
-sheet; it aborts if the new dimensions disagree with the spec.
-
-## X02 handoff
-
-### Files added
-
-- `actors/enemies/ghost_archer.gd`, `.tscn`, `_config.gd`, and `_frames.tres`
-- `actors/enemies/ghost_arrow.gd` and `.tscn`
-- `data/actors/ghost_archer.tres` and `ghost_archer_tactics.tres`
-- `tests/cases/test_ghost_archer.gd`
-
-### Integration and validation
-
-- `scenes/main.tscn` injects the Ghost Archer through the existing
-  `RunCoordinator.enemy_scene` / `enemy_config` extension seam. The wave and F4
-  debug command therefore use the same coordinator-owned spawn path.
-- Added tests for patrol/detection, retreat spacing, aim/shoot/cooldown, one-hit
-  projectile resolution, armour integration, owner exclusion, timeout, damage,
-  death, and no post-death behaviour.
-- Commands run: SpriteFrames generator, headless import, full test scene, and a
-  180-frame headless M1 main-scene smoke run.
-- No frozen interface or protected framework file changed.

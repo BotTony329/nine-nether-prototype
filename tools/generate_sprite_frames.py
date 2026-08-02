@@ -23,60 +23,68 @@ import sys
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 
-# actor -> (output path, frame width, frame height, [(anim, sheet, frames, fps, loop)])
+# actor -> (output path, frame width, frame height,
+#           [(animation, sheet, source-frame indices, fps, loop)])
 #
 # Animation names remain the gameplay framework's established names.  Art V3
 # calls locomotion "walk" in metadata, while the state machines call it "run".
 ACTORS = {
     "player": (
-        "actors/player/player_frames.tres",
+        "assets_v2/godot/player_frames.tres",
         192,
         160,
         [
-            ("idle", "assets_v3/production/player/player_idle.png", 4, 6.0, True),
-            ("run", "assets_v3/production/player/player_walk.png", 6, 10.0, True),
-            # Sprint 01 deliberately has no jump production set.  Reusing the
-            # first two idle frames preserves the existing state contract.
-            ("jump", "assets_v3/production/player/player_idle.png", 2, 10.0, False),
-            ("attack", "assets_v3/production/player/player_attack.png", 4, 12.0, False),
-            ("hurt", "assets_v3/production/player/player_hurt.png", 2, 8.0, False),
-            ("death", "assets_v3/production/player/player_death.png", 6, 8.0, False),
+            ("player_idle", "assets_v3/production/player/player_idle.png", [0, 1, 2, 3], 6.0, True),
+            ("player_run", "assets_v3/production/player/player_walk.png", [0, 1, 2, 3, 4, 5], 10.0, True),
+            # Sprint 01 has no V3 jump/fall set. Reuse distinct idle pairs so
+            # develop's rising/falling animation contract remains available.
+            ("player_jump", "assets_v3/production/player/player_idle.png", [0, 1], 10.0, False),
+            ("player_fall", "assets_v3/production/player/player_idle.png", [2, 3], 10.0, False),
+            # Develop gates the hitbox on frames 4-5. Repeat each approved V3
+            # pose twice to retain the eight-frame startup/active/recovery map.
+            ("player_light_attack_1", "assets_v3/production/player/player_attack.png", [0, 0, 1, 1, 2, 2, 3, 3], 12.0, False),
+            ("player_light_attack_2", "assets_v3/production/player/player_attack.png", [0, 0, 1, 1, 2, 2, 3, 3], 12.0, False),
+            ("player_heavy_attack", "assets_v3/production/player/player_attack.png", [0, 0, 1, 1, 2, 2, 3, 3], 10.0, False),
+            ("player_hurt", "assets_v3/production/player/player_hurt.png", [0, 1], 8.0, False),
+            ("player_death", "assets_v3/production/player/player_death.png", [0, 1, 2, 3, 4, 5], 8.0, False),
         ],
     ),
     "ghost_melee": (
-        "actors/enemies/ghost_melee_frames.tres",
+        "assets_v2/godot/melee_ghost_frames.tres",
         192,
         160,
         [
-            ("idle", "assets_v3/production/ghost_melee/ghost_melee_idle.png", 4, 6.0, True),
-            ("run", "assets_v3/production/ghost_melee/ghost_melee_walk.png", 6, 9.0, True),
-            ("attack", "assets_v3/production/ghost_melee/ghost_melee_attack.png", 4, 10.0, False),
-            ("hurt", "assets_v3/production/ghost_melee/ghost_melee_hurt.png", 2, 8.0, False),
-            ("death", "assets_v3/production/ghost_melee/ghost_melee_death.png", 4, 7.0, False),
+            ("melee_ghost_idle", "assets_v3/production/ghost_melee/ghost_melee_idle.png", [0, 1, 2, 3], 6.0, True),
+            ("melee_ghost_walk", "assets_v3/production/ghost_melee/ghost_melee_walk.png", [0, 1, 2, 3, 4, 5], 9.0, True),
+            ("melee_ghost_attack", "assets_v3/production/ghost_melee/ghost_melee_attack.png", [0, 0, 1, 1, 2, 2, 3, 3], 10.0, False),
+            ("melee_ghost_hurt", "assets_v3/production/ghost_melee/ghost_melee_hurt.png", [0, 1], 8.0, False),
+            ("melee_ghost_death", "assets_v3/production/ghost_melee/ghost_melee_death.png", [0, 1, 2, 3], 7.0, False),
         ],
     ),
     "ghost_archer": (
-        "actors/enemies/ghost_archer_frames.tres",
+        "assets_v2/godot/ghost_archer_frames.tres",
         192,
         160,
         [
-            ("idle", "assets_v3/production/ghost_archer/ghost_archer_idle.png", 4, 6.0, True),
-            ("run", "assets_v3/production/ghost_archer/ghost_archer_walk.png", 6, 9.0, True),
-            ("attack", "assets_v3/production/ghost_archer/ghost_archer_attack.png", 4, 10.0, False),
-            ("hurt", "assets_v3/production/ghost_archer/ghost_archer_hurt.png", 2, 8.0, False),
-            ("death", "assets_v3/production/ghost_archer/ghost_archer_death.png", 4, 7.0, False),
+            ("ghost_archer_idle", "assets_v3/production/ghost_archer/ghost_archer_idle.png", [0, 1, 2, 3], 6.0, True),
+            ("ghost_archer_retreat", "assets_v3/production/ghost_archer/ghost_archer_walk.png", [0, 1, 2, 3, 4, 5], 9.0, True),
+            ("ghost_archer_aim", "assets_v3/production/ghost_archer/ghost_archer_attack.png", [0, 0, 1, 1, 1, 1], 8.0, False),
+            ("ghost_archer_shoot", "assets_v3/production/ghost_archer/ghost_archer_attack.png", [1, 2, 2, 3], 14.0, False),
+            ("ghost_archer_hurt", "assets_v3/production/ghost_archer/ghost_archer_hurt.png", [0, 1], 8.0, False),
+            ("ghost_archer_death", "assets_v3/production/ghost_archer/ghost_archer_death.png", [0, 1, 2, 3], 7.0, False),
         ],
     ),
     "boss": (
-        "actors/boss/boss_frames.tres",
+        "assets_v2/godot/gate_warden_frames.tres",
         320,
         256,
         [
-            ("idle", "assets_v3/production/gate_warden/gate_warden_idle.png", 4, 5.0, True),
-            ("run", "assets_v3/production/gate_warden/gate_warden_walk.png", 6, 7.0, True),
-            ("attack", "assets_v3/production/gate_warden/gate_warden_attack.png", 5, 9.0, False),
-            ("hurt", "assets_v3/production/gate_warden/gate_warden_hurt.png", 2, 7.0, False),
-            ("death", "assets_v3/production/gate_warden/gate_warden_death.png", 8, 6.0, False),
+            ("gate_warden_idle", "assets_v3/production/gate_warden/gate_warden_idle.png", [0, 1, 2, 3], 5.0, True),
+            ("gate_warden_walk", "assets_v3/production/gate_warden/gate_warden_walk.png", [0, 1, 2, 3, 4, 5], 7.0, True),
+            ("gate_warden_attack_1", "assets_v3/production/gate_warden/gate_warden_attack.png", [0, 0, 1, 1, 2, 2, 3, 3, 4, 4], 9.0, False),
+            ("gate_warden_attack_2", "assets_v3/production/gate_warden/gate_warden_attack.png", [0, 0, 1, 1, 2, 2, 3, 3, 4, 4], 8.0, False),
+            ("gate_warden_hurt", "assets_v3/production/gate_warden/gate_warden_hurt.png", [0, 1], 7.0, False),
+            ("gate_warden_death", "assets_v3/production/gate_warden/gate_warden_death.png", [0, 1, 2, 3, 4, 5, 6, 7], 6.0, False),
         ],
     ),
 }
@@ -87,20 +95,19 @@ HEADER = (
 )
 
 
-def verify_sheet(sheet: pathlib.Path, frames: int, width: int, height: int) -> None:
+def verify_sheet(sheet: pathlib.Path, frame_indices: list[int], width: int, height: int) -> None:
     """Fail loudly if a sheet does not match the frame table."""
     try:
         from PIL import Image  # optional; skip verification when unavailable
     except ImportError:
         return
     with Image.open(sheet) as image:
-        expected = (frames * width, height)
-        # A resource may intentionally use a prefix of a longer sheet (the
-        # player jump fallback reuses two frames from the four-frame idle set).
+        source_frames = max(frame_indices) + 1
+        expected = (source_frames * width, height)
         if image.height != height or image.width < expected[0] or image.width % width != 0:
             raise SystemExit(
                 f"{sheet.relative_to(REPO_ROOT)} is {image.size}, "
-                f"expected {expected} for {frames} frames of {width}x{height}"
+                f"expected at least {expected} for indices {frame_indices} at {width}x{height}"
             )
 
 
@@ -110,19 +117,19 @@ def build(actor: str) -> str:
     sub_lines: list[str] = []
     animation_entries: list[str] = []
 
-    for index, (anim, sheet, frames, fps, loop) in enumerate(animations):
-        verify_sheet(REPO_ROOT / sheet, frames, frame_w, frame_h)
+    for index, (anim, sheet, frame_indices, fps, loop) in enumerate(animations):
+        verify_sheet(REPO_ROOT / sheet, frame_indices, frame_w, frame_h)
         ext_id = f"{index + 1}_{anim}"
         ext_lines.append(
             f'[ext_resource type="Texture2D" path="res://{sheet}" id="{ext_id}"]'
         )
         frame_refs = []
-        for frame in range(frames):
+        for frame, source_frame in enumerate(frame_indices):
             sub_id = f"AtlasTexture_{anim}_{frame}"
             sub_lines.append(
                 f'[sub_resource type="AtlasTexture" id="{sub_id}"]\n'
                 f'atlas = ExtResource("{ext_id}")\n'
-                f"region = Rect2({frame * frame_w}, 0, {frame_w}, {frame_h})"
+                f"region = Rect2({source_frame * frame_w}, 0, {frame_w}, {frame_h})"
             )
             frame_refs.append(
                 '{\n"duration": 1.0,\n'

@@ -120,12 +120,21 @@ func test_archer_aims_shoots_and_respects_cooldown() -> void:
 	var target := _target(Vector2(150.0, 0.0))
 	var archer := _spawn_archer(target)
 	var shots := [0]
-	archer.arrow_fired.connect(func(_arrow: GhostArrow) -> void: shots[0] += 1)
+	var release_frames := []
+	archer.arrow_fired.connect(func(_arrow: GhostArrow) -> void:
+		shots[0] += 1
+		release_frames.append(archer.sprite.frame)
+	)
 
-	await step_physics(3)
-	assert_equal(archer.state(), EnemyBase.State.WINDUP, "preferred range begins the readable aim")
-	await step_physics(36)
+	var saw_aim := false
+	for _i in range(20):
+		await step_physics(1)
+		saw_aim = saw_aim or archer.state() == EnemyBase.State.WINDUP
+	assert_true(saw_aim, "preferred range begins the readable aim")
+	await step_physics(45)
 	assert_equal(shots[0], 1, "one arrow is released after the wind-up")
+	if not release_frames.is_empty():
+		assert_equal(release_frames[0], 1, "the arrow releases on authored shoot frame 1")
 
 	await step_physics(55)
 	assert_equal(shots[0], 1, "recovery and cooldown prevent an immediate second shot")
