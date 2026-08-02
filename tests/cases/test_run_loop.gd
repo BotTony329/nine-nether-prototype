@@ -12,6 +12,8 @@ const CRITICAL_SCENES := [
 	"res://actors/player/player.tscn",
 	"res://actors/enemies/enemy_base.tscn",
 	"res://actors/enemies/ghost_melee.tscn",
+	"res://actors/enemies/ghost_archer.tscn",
+	"res://actors/enemies/ghost_arrow.tscn",
 	"res://actors/boss/boss.tscn",
 	"res://ui/hud.tscn",
 	"res://ui/sacrifice_panel.tscn",
@@ -159,6 +161,10 @@ func test_debug_commands_route_through_the_coordinator() -> void:
 	coordinator.debug_spawn_reference_enemy()
 	assert_equal(
 		coordinator.live_enemies().size(), enemies_before + 1, "debug spawn added an enemy"
+	)
+	assert_true(
+		coordinator.live_enemies()[-1] is GhostArcher,
+		"the injected debug enemy is the Ghost Archer"
 	)
 
 	var digest := state.snapshot_hash()
