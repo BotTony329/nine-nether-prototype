@@ -10,6 +10,8 @@ script = ExtResource("2_script")
 archer_config = ExtResource("4_tactics")
 
 [node name="Sprite" parent="." index="0"]
+position = Vector2(0, -25.2)
+scale = Vector2(0.36, 0.36)
 sprite_frames = ExtResource("3_frames")
 animation = &"idle"
 autoplay = "idle"

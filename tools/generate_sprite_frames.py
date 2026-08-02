@@ -24,54 +24,59 @@ import sys
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 # actor -> (output path, frame width, frame height, [(anim, sheet, frames, fps, loop)])
+#
+# Animation names remain the gameplay framework's established names.  Art V3
+# calls locomotion "walk" in metadata, while the state machines call it "run".
 ACTORS = {
     "player": (
         "actors/player/player_frames.tres",
-        48,
-        48,
+        192,
+        160,
         [
-            ("idle", "assets/player/player_idle.png", 4, 8.0, True),
-            ("run", "assets/player/player_run.png", 6, 12.0, True),
-            ("jump", "assets/player/player_jump.png", 2, 10.0, False),
-            ("attack", "assets/player/player_attack.png", 4, 14.0, False),
-            ("hurt", "assets/player/player_hurt.png", 2, 10.0, False),
-            ("death", "assets/player/player_death.png", 6, 8.0, False),
+            ("idle", "assets_v3/production/player/player_idle.png", 4, 6.0, True),
+            ("run", "assets_v3/production/player/player_walk.png", 6, 10.0, True),
+            # Sprint 01 deliberately has no jump production set.  Reusing the
+            # first two idle frames preserves the existing state contract.
+            ("jump", "assets_v3/production/player/player_idle.png", 2, 10.0, False),
+            ("attack", "assets_v3/production/player/player_attack.png", 4, 12.0, False),
+            ("hurt", "assets_v3/production/player/player_hurt.png", 2, 8.0, False),
+            ("death", "assets_v3/production/player/player_death.png", 6, 8.0, False),
         ],
     ),
     "ghost_melee": (
         "actors/enemies/ghost_melee_frames.tres",
-        48,
-        48,
+        192,
+        160,
         [
-            ("idle", "assets/enemy/ghost_melee_idle.png", 4, 8.0, True),
-            ("run", "assets/enemy/ghost_melee_run.png", 6, 10.0, True),
-            ("attack", "assets/enemy/ghost_melee_attack.png", 4, 12.0, False),
-            ("hurt", "assets/enemy/ghost_melee_hurt.png", 2, 10.0, False),
-            ("death", "assets/enemy/ghost_melee_death.png", 4, 8.0, False),
+            ("idle", "assets_v3/production/ghost_melee/ghost_melee_idle.png", 4, 6.0, True),
+            ("run", "assets_v3/production/ghost_melee/ghost_melee_walk.png", 6, 9.0, True),
+            ("attack", "assets_v3/production/ghost_melee/ghost_melee_attack.png", 4, 10.0, False),
+            ("hurt", "assets_v3/production/ghost_melee/ghost_melee_hurt.png", 2, 8.0, False),
+            ("death", "assets_v3/production/ghost_melee/ghost_melee_death.png", 4, 7.0, False),
         ],
     ),
     "ghost_archer": (
         "actors/enemies/ghost_archer_frames.tres",
-        48,
-        48,
+        192,
+        160,
         [
-            ("idle", "assets/enemy/ghost_archer_idle.png", 4, 8.0, True),
-            ("run", "assets/enemy/ghost_archer_run.png", 6, 10.0, True),
-            ("attack", "assets/enemy/ghost_archer_attack.png", 4, 12.0, False),
-            ("hurt", "assets/enemy/ghost_archer_hurt.png", 2, 10.0, False),
-            ("death", "assets/enemy/ghost_archer_death.png", 4, 8.0, False),
+            ("idle", "assets_v3/production/ghost_archer/ghost_archer_idle.png", 4, 6.0, True),
+            ("run", "assets_v3/production/ghost_archer/ghost_archer_walk.png", 6, 9.0, True),
+            ("attack", "assets_v3/production/ghost_archer/ghost_archer_attack.png", 4, 10.0, False),
+            ("hurt", "assets_v3/production/ghost_archer/ghost_archer_hurt.png", 2, 8.0, False),
+            ("death", "assets_v3/production/ghost_archer/ghost_archer_death.png", 4, 7.0, False),
         ],
     ),
     "boss": (
         "actors/boss/boss_frames.tres",
-        96,
-        96,
+        320,
+        256,
         [
-            ("idle", "assets/boss/boss_idle.png", 4, 6.0, True),
-            ("run", "assets/boss/boss_run.png", 6, 8.0, True),
-            ("attack", "assets/boss/boss_attack.png", 5, 10.0, False),
-            ("hurt", "assets/boss/boss_hurt.png", 2, 8.0, False),
-            ("death", "assets/boss/boss_death.png", 8, 6.0, False),
+            ("idle", "assets_v3/production/gate_warden/gate_warden_idle.png", 4, 5.0, True),
+            ("run", "assets_v3/production/gate_warden/gate_warden_walk.png", 6, 7.0, True),
+            ("attack", "assets_v3/production/gate_warden/gate_warden_attack.png", 5, 9.0, False),
+            ("hurt", "assets_v3/production/gate_warden/gate_warden_hurt.png", 2, 7.0, False),
+            ("death", "assets_v3/production/gate_warden/gate_warden_death.png", 8, 6.0, False),
         ],
     ),
 }
@@ -90,7 +95,9 @@ def verify_sheet(sheet: pathlib.Path, frames: int, width: int, height: int) -> N
         return
     with Image.open(sheet) as image:
         expected = (frames * width, height)
-        if image.size != expected:
+        # A resource may intentionally use a prefix of a longer sheet (the
+        # player jump fallback reuses two frames from the four-frame idle set).
+        if image.height != height or image.width < expected[0] or image.width % width != 0:
             raise SystemExit(
                 f"{sheet.relative_to(REPO_ROOT)} is {image.size}, "
                 f"expected {expected} for {frames} frames of {width}x{height}"

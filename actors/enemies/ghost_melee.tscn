@@ -6,6 +6,8 @@
 [node name="GhostMelee" instance=ExtResource("1_base")]
 
 [node name="Sprite" parent="." index="0"]
+position = Vector2(0, -25.2)
+scale = Vector2(0.36, 0.36)
 sprite_frames = ExtResource("2_frames")
 animation = &"idle"
 autoplay = "idle"
