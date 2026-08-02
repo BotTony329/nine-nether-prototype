@@ -1,0 +1,58 @@
+name: repository-validation
+
+on:
+  pull_request:
+    branches: [develop, main]
+
+permissions:
+  contents: read
+
+jobs:
+  repository-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate required files and repository hygiene
+        shell: bash
+        run: |
+          set -euo pipefail
+          required=(
+            README.md AGENTS.md .gitignore .editorconfig .gitattributes CODEOWNERS
+            CONTRIBUTING.md SECURITY.md .github/pull_request_template.md
+            .github/ISSUE_TEMPLATE/bug_report.yml
+            .github/ISSUE_TEMPLATE/feature_task.yml
+            .github/ISSUE_TEMPLATE/config.yml
+            docs/PRD.md docs/PROTOTYPE_CONTRACT.md docs/ARCHITECTURE.md
+            docs/INTERFACES.md docs/DECISIONS.md docs/AI_HANDOFF.md docs/TESTING.md
+            docs/GITHUB_WORKFLOW.md docs/BRANCHING_STRATEGY.md
+            docs/REPOSITORY_OWNERSHIP.md docs/TASKS/README.md
+            docs/TASKS/CLAUDE_TASKS.md docs/TASKS/CODEX_TASKS.md
+          )
+          for path in "${required[@]}"; do
+            test -s "$path" || { echo "Missing or empty required file: $path"; exit 1; }
+          done
+
+          if git grep -nEI '(ghp|github_pat|gho|ghu|ghs|ghr)_[A-Za-z0-9_]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----' -- ':!docs/source/*.pdf'; then
+            echo 'Potential committed secret detected.'
+            exit 1
+          fi
+
+          while IFS= read -r -d '' path; do
+            size=$(stat -c %s "$path")
+            if (( size > 10485760 )); then
+              case "$path" in docs/source/*.pdf) ;; *) echo "Oversized file (>10 MiB): $path"; exit 1 ;; esac
+            fi
+          done < <(find . -type f -not -path './.git/*' -print0)
+
+      - name: Parse YAML and JSON
+        shell: bash
+        run: |
+          ruby -e 'require "yaml"; Dir.glob("**/*.{yml,yaml}", File::FNM_DOTMATCH).each { |f| YAML.safe_load(File.read(f), aliases: true, filename: f) }'
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for path in Path('.').rglob('*.json'):
+              if '.git' not in path.parts:
+                  json.loads(path.read_text(encoding='utf-8'))
+          PY
