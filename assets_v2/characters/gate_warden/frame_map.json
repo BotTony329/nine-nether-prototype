@@ -1,0 +1,195 @@
+{
+  "character": "gate_warden",
+  "frame_size": [
+    192,
+    192
+  ],
+  "pivot": [
+    96,
+    128
+  ],
+  "foot_position": [
+    96,
+    176
+  ],
+  "animations": {
+    "gate_warden_idle": {
+      "frames": 8,
+      "fps": 6.0,
+      "loop": true,
+      "phases": {
+        "startup": [],
+        "active": [],
+        "recovery": []
+      },
+      "pivot": [
+        96,
+        128
+      ],
+      "foot_position": [
+        96,
+        176
+      ],
+      "frame_size": [
+        192,
+        192
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "heavy breathing"
+    },
+    "gate_warden_walk": {
+      "frames": 8,
+      "fps": 8.0,
+      "loop": true,
+      "phases": {
+        "startup": [],
+        "active": [],
+        "recovery": []
+      },
+      "pivot": [
+        96,
+        128
+      ],
+      "foot_position": [
+        96,
+        176
+      ],
+      "frame_size": [
+        192,
+        192
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "earth-shaking steps"
+    },
+    "gate_warden_attack_1": {
+      "frames": 10,
+      "fps": 9.0,
+      "loop": false,
+      "phases": {
+        "startup": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "active": [
+          4,
+          5
+        ],
+        "recovery": [
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "pivot": [
+        96,
+        128
+      ],
+      "foot_position": [
+        96,
+        176
+      ],
+      "frame_size": [
+        192,
+        192
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "horizontal great-blade sweep"
+    },
+    "gate_warden_attack_2": {
+      "frames": 12,
+      "fps": 8.0,
+      "loop": false,
+      "phases": {
+        "startup": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "active": [
+          6,
+          7
+        ],
+        "recovery": [
+          8,
+          9,
+          10,
+          11
+        ]
+      },
+      "pivot": [
+        96,
+        128
+      ],
+      "foot_position": [
+        96,
+        176
+      ],
+      "frame_size": [
+        192,
+        192
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "overhead ground pound"
+    },
+    "gate_warden_hurt": {
+      "frames": 4,
+      "fps": 8.0,
+      "loop": false,
+      "phases": {
+        "startup": [],
+        "active": [],
+        "recovery": []
+      },
+      "pivot": [
+        96,
+        128
+      ],
+      "foot_position": [
+        96,
+        176
+      ],
+      "frame_size": [
+        192,
+        192
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "recoil"
+    },
+    "gate_warden_death": {
+      "frames": 12,
+      "fps": 6.0,
+      "loop": false,
+      "phases": {
+        "startup": [],
+        "active": [],
+        "recovery": []
+      },
+      "pivot": [
+        96,
+        128
+      ],
+      "foot_position": [
+        96,
+        176
+      ],
+      "frame_size": [
+        192,
+        192
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "colossal collapse"
+    }
+  }
+}

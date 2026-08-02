@@ -1,0 +1,153 @@
+{
+  "character": "melee_ghost",
+  "frame_size": [
+    96,
+    96
+  ],
+  "pivot": [
+    48,
+    70
+  ],
+  "foot_position": [
+    48,
+    90
+  ],
+  "animations": {
+    "melee_ghost_idle": {
+      "frames": 6,
+      "fps": 8.0,
+      "loop": true,
+      "phases": {
+        "startup": [],
+        "active": [],
+        "recovery": []
+      },
+      "pivot": [
+        48,
+        70
+      ],
+      "foot_position": [
+        48,
+        90
+      ],
+      "frame_size": [
+        96,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "hunched sway, ghost fire leak"
+    },
+    "melee_ghost_walk": {
+      "frames": 8,
+      "fps": 8.0,
+      "loop": true,
+      "phases": {
+        "startup": [],
+        "active": [],
+        "recovery": []
+      },
+      "pivot": [
+        48,
+        70
+      ],
+      "foot_position": [
+        48,
+        90
+      ],
+      "frame_size": [
+        96,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "lumbering gait"
+    },
+    "melee_ghost_attack": {
+      "frames": 8,
+      "fps": 10.0,
+      "loop": false,
+      "phases": {
+        "startup": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "active": [
+          4,
+          5
+        ],
+        "recovery": [
+          6,
+          7
+        ]
+      },
+      "pivot": [
+        48,
+        70
+      ],
+      "foot_position": [
+        48,
+        90
+      ],
+      "frame_size": [
+        96,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "overhead slam"
+    },
+    "melee_ghost_hurt": {
+      "frames": 4,
+      "fps": 10.0,
+      "loop": false,
+      "phases": {
+        "startup": [],
+        "active": [],
+        "recovery": []
+      },
+      "pivot": [
+        48,
+        70
+      ],
+      "foot_position": [
+        48,
+        90
+      ],
+      "frame_size": [
+        96,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "recoil"
+    },
+    "melee_ghost_death": {
+      "frames": 8,
+      "fps": 8.0,
+      "loop": false,
+      "phases": {
+        "startup": [],
+        "active": [],
+        "recovery": []
+      },
+      "pivot": [
+        48,
+        70
+      ],
+      "foot_position": [
+        48,
+        90
+      ],
+      "frame_size": [
+        96,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "dissolve"
+    }
+  }
+}

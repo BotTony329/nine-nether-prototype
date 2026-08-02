@@ -1,0 +1,211 @@
+{
+  "character": "corpse_beast",
+  "frame_size": [
+    128,
+    96
+  ],
+  "pivot": [
+    64,
+    58
+  ],
+  "foot_position": [
+    64,
+    86
+  ],
+  "animations": {
+    "corpse_beast_idle": {
+      "frames": 6,
+      "fps": 5.0,
+      "loop": true,
+      "phases": {
+        "startup": [],
+        "active": [],
+        "recovery": []
+      },
+      "pivot": [
+        64,
+        58
+      ],
+      "foot_position": [
+        64,
+        86
+      ],
+      "frame_size": [
+        128,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "low breathing"
+    },
+    "corpse_beast_run": {
+      "frames": 8,
+      "fps": 10.0,
+      "loop": true,
+      "phases": {
+        "startup": [],
+        "active": [],
+        "recovery": []
+      },
+      "pivot": [
+        64,
+        58
+      ],
+      "foot_position": [
+        64,
+        86
+      ],
+      "frame_size": [
+        128,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "gallop"
+    },
+    "corpse_beast_charge_windup": {
+      "frames": 6,
+      "fps": 8.0,
+      "loop": false,
+      "phases": {
+        "startup": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "active": [],
+        "recovery": [
+          5
+        ]
+      },
+      "pivot": [
+        64,
+        58
+      ],
+      "foot_position": [
+        64,
+        86
+      ],
+      "frame_size": [
+        128,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": 5,
+      "note": "coil; charge_ready at 5"
+    },
+    "corpse_beast_charge": {
+      "frames": 4,
+      "fps": 12.0,
+      "loop": false,
+      "phases": {
+        "startup": [],
+        "active": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "recovery": []
+      },
+      "pivot": [
+        64,
+        58
+      ],
+      "foot_position": [
+        64,
+        86
+      ],
+      "frame_size": [
+        128,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "full-speed contact"
+    },
+    "corpse_beast_wall_impact": {
+      "frames": 4,
+      "fps": 8.0,
+      "loop": false,
+      "phases": {
+        "startup": [],
+        "active": [
+          0,
+          1
+        ],
+        "recovery": [
+          2,
+          3
+        ]
+      },
+      "pivot": [
+        64,
+        58
+      ],
+      "foot_position": [
+        64,
+        86
+      ],
+      "frame_size": [
+        128,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "slam into wall"
+    },
+    "corpse_beast_hurt": {
+      "frames": 4,
+      "fps": 10.0,
+      "loop": false,
+      "phases": {
+        "startup": [],
+        "active": [],
+        "recovery": []
+      },
+      "pivot": [
+        64,
+        58
+      ],
+      "foot_position": [
+        64,
+        86
+      ],
+      "frame_size": [
+        128,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "scramble"
+    },
+    "corpse_beast_death": {
+      "frames": 8,
+      "fps": 6.0,
+      "loop": false,
+      "phases": {
+        "startup": [],
+        "active": [],
+        "recovery": []
+      },
+      "pivot": [
+        64,
+        58
+      ],
+      "foot_position": [
+        64,
+        86
+      ],
+      "frame_size": [
+        128,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "collapse"
+    }
+  }
+}
