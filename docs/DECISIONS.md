@@ -213,3 +213,25 @@ Append decisions in this format; do not rewrite accepted history.
   correct rather than broken. A future StaminaService can wrap
   `Player.spend_stamina` without changing its callers.
 - **Interfaces affected:** `RunState` stamina commands, `Player.spend_stamina`.
+
+## ADR-012: V2 authored frames gate the existing attack flow
+
+- **Status:** Accepted
+- **Date:** 2026-08-02
+- **Owner:** Codex
+- **Context:** Art V2 frame maps declare visible startup, active, recovery, and
+  projectile-release frames. The M1 actors previously used coarse timers, which
+  could deal damage before or after the visible strike. The frozen combat and
+  actor foundations must remain authoritative.
+- **Decision:** Concrete actor/state adapters map existing gameplay states to
+  V2 animations and use `AnimatedSprite2D.frame_changed` only to gate the
+  existing `Hitbox` or emit the already-defined projectile command. Damage
+  remains `Hitbox` → `Hurtbox` → `CombatResolver`. Player/melee active frames
+  are 4–5, Gate Warden active frames are 4–5, and Ghost Archer release is shoot
+  frame 1 after aim reaches frame 5. Boss victory and player defeat presentation
+  wait for the death animation to complete.
+- **Consequences:** Visible and effective strikes agree without a second combat
+  system. Concrete animations now define attack phase duration; a missing strip
+  must use the existing configured timer as a documented fallback. Only actions
+  already supported by gameplay are mapped.
+- **Interfaces affected:** none. No frozen or protected framework file changed.

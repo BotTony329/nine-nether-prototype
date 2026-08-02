@@ -46,7 +46,9 @@ tests/
 ├── framework/test_case.gd              assertions, physics stepping, config helper
 └── cases/
     ├── test_actors.gd          EnemyBase and BossActor
+    ├── test_art_v2.gd          V2 loading, state mapping, frame timing, debug visibility
     ├── test_combat_resolver.gd damage pipeline
+    ├── test_ghost_archer.gd    ranged AI, release timing, projectile and death
     ├── test_integrity.gd       structural integrity and snapshots
     ├── test_rng.gd             determinism and stream isolation
     ├── test_run_loop.gd        end-to-end run plus scene smoke checks
@@ -81,7 +83,14 @@ lock-budget gating; and every shipped card passes `validate()`.
 **Enemy and Boss** — the Damageable shape, damage through the resolver, death
 firing exactly once across four routes (two lethal hits, a hit after death, and
 two direct `die()` calls), a corpse taking no damage and running no behaviour,
-target acquisition, and that `BossActor` extends `EnemyBase`.
+target acquisition, that `BossActor` extends `EnemyBase`, authored melee/Boss
+active-frame gating, and victory waiting for the Boss death strip.
+
+**Art V2 and Ghost Archer** — required resources and critical scenes load,
+player state-to-animation mappings, player startup/active/recovery gating,
+hurt/death overrides, melee and Boss active frames, Archer patrol/range/aim/
+release/cooldown/death, Ghost Arrow owner exclusion/one-hit/timeout behaviour,
+and the debug overlay being off by default while remaining toggleable.
 
 **RNG** — same seed replays, different seeds diverge, draining one stream does
 not shift another, stream names change the derived seed, and integer draws stay
@@ -91,6 +100,8 @@ in range and replay.
 connection from simulated input, wave clear, sacrifice offer and confirm, boss
 spawn, victory, restart, and player death — plus every debug command and a smoke
 check that all ten critical scenes load and instantiate.
+
+Current baseline after M1.5: **66 tests / 421 assertions**.
 
 ## What is not covered
 
