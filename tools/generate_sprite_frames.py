@@ -30,7 +30,7 @@ REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 # calls locomotion "walk" in metadata, while the state machines call it "run".
 ACTORS = {
     "player": (
-        "assets_v2/godot/player_frames.tres",
+        "assets_v3/godot/player_frames.tres",
         192,
         160,
         [
@@ -50,7 +50,7 @@ ACTORS = {
         ],
     ),
     "ghost_melee": (
-        "assets_v2/godot/melee_ghost_frames.tres",
+        "assets_v3/godot/melee_ghost_frames.tres",
         192,
         160,
         [
@@ -62,7 +62,7 @@ ACTORS = {
         ],
     ),
     "ghost_archer": (
-        "assets_v2/godot/ghost_archer_frames.tres",
+        "assets_v3/godot/ghost_archer_frames.tres",
         192,
         160,
         [
@@ -75,7 +75,7 @@ ACTORS = {
         ],
     ),
     "boss": (
-        "assets_v2/godot/gate_warden_frames.tres",
+        "assets_v3/godot/gate_warden_frames.tres",
         320,
         256,
         [

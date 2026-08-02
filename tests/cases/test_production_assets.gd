@@ -5,25 +5,25 @@ extends TestCase
 const ACTORS := {
 	"player": {
 		"scene": "res://actors/player/player.tscn",
-		"frames": "res://assets_v2/godot/player_frames.tres",
+		"frames": "res://assets_v3/godot/player_frames.tres",
 		"map": "res://assets_v3/production/player/frame_map.json",
 		"counts": {&"player_idle": 4, &"player_run": 6, &"player_jump": 2, &"player_fall": 2, &"player_light_attack_1": 8, &"player_hurt": 2, &"player_death": 6},
 	},
 	"ghost_melee": {
 		"scene": "res://actors/enemies/ghost_melee.tscn",
-		"frames": "res://assets_v2/godot/melee_ghost_frames.tres",
+		"frames": "res://assets_v3/godot/melee_ghost_frames.tres",
 		"map": "res://assets_v3/production/ghost_melee/frame_map.json",
 		"counts": {&"melee_ghost_idle": 4, &"melee_ghost_walk": 6, &"melee_ghost_attack": 8, &"melee_ghost_hurt": 2, &"melee_ghost_death": 4},
 	},
 	"ghost_archer": {
 		"scene": "res://actors/enemies/ghost_archer.tscn",
-		"frames": "res://assets_v2/godot/ghost_archer_frames.tres",
+		"frames": "res://assets_v3/godot/ghost_archer_frames.tres",
 		"map": "res://assets_v3/production/ghost_archer/frame_map.json",
 		"counts": {&"ghost_archer_idle": 4, &"ghost_archer_retreat": 6, &"ghost_archer_aim": 6, &"ghost_archer_shoot": 4, &"ghost_archer_hurt": 2, &"ghost_archer_death": 4},
 	},
 	"gate_warden": {
 		"scene": "res://actors/boss/boss.tscn",
-		"frames": "res://assets_v2/godot/gate_warden_frames.tres",
+		"frames": "res://assets_v3/godot/gate_warden_frames.tres",
 		"map": "res://assets_v3/production/gate_warden/frame_map.json",
 		"counts": {&"gate_warden_idle": 4, &"gate_warden_walk": 6, &"gate_warden_attack_1": 10, &"gate_warden_hurt": 2, &"gate_warden_death": 8},
 	},
@@ -114,10 +114,37 @@ func test_live_scenes_reference_v3_production_art() -> void:
 	var main := (load("res://scenes/main.tscn") as PackedScene).instantiate()
 	assert_not_null(main.get_node_or_null("CombatFeedback"), "one V3 combat-feedback observer is present")
 	assert_null(main.get_node_or_null("CombatEffects"), "legacy hit observer is not duplicated")
+	var feedback_script := main.get_node("CombatFeedback").get_script() as Script
+	var effects: Dictionary = feedback_script.get_script_constant_map()["EFFECTS"]
+	for effect_name: StringName in [&"slash", &"hit", &"blood", &"death"]:
+		var texture: Texture2D = effects[effect_name]["texture"]
+		assert_true(texture.resource_path.begins_with("res://assets_v3/production/"), "%s feedback maps to V3" % effect_name)
 	var hud := main.get_node("UIRoot/Hud")
 	assert_true((hud.get_node("Player/Icon") as TextureRect).texture.resource_path.begins_with("res://assets_v3/production/"), "player HUD uses V3 HP icon")
 	assert_true((hud.get_node("Boss/Icon") as TextureRect).texture.resource_path.begins_with("res://assets_v3/production/"), "Boss HUD uses V3 icon")
+	assert_null(hud.get_node_or_null("Player/StaminaIcon"), "obsolete V2 stamina icon is absent")
+	assert_null(hud.get_node_or_null("Player/AttackIcon"), "obsolete V2 attack icon is absent")
+	assert_null(hud.get_node_or_null("Player/IntegrityIcon"), "obsolete V2 integrity icon is absent")
+	assert_null(hud.get_node_or_null("Player/ImbalanceIcon"), "obsolete V2 imbalance icon is absent")
 	main.free()
+
+
+func test_live_actor_scenes_have_no_legacy_visual_paths() -> void:
+	var paths := [
+		"res://actors/player/player.tscn",
+		"res://actors/enemies/ghost_melee.tscn",
+		"res://actors/enemies/ghost_archer.tscn",
+		"res://actors/enemies/ghost_arrow.tscn",
+		"res://actors/boss/boss.tscn",
+	]
+	for path: String in paths:
+		var file := FileAccess.open(path, FileAccess.READ)
+		assert_not_null(file, "%s opens" % path)
+		if file == null:
+			continue
+		var source := file.get_as_text()
+		assert_false(source.contains("res://assets_v2/"), "%s has no Art V2 visual reference" % path)
+		assert_false(source.contains("res://assets/player/") or source.contains("res://assets/enemy/") or source.contains("res://assets/boss/"), "%s has no Art V1 actor reference" % path)
 
 
 func _read_json(path: String) -> Dictionary:

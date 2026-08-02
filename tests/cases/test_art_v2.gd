@@ -44,10 +44,10 @@ func _spawn_enemy(scene_path: String, config_path: String, target: Node2D) -> En
 
 
 func test_all_integrated_resources_load_with_declared_animations() -> void:
-	var player_frames := load("res://assets_v2/godot/player_frames.tres") as SpriteFrames
-	var melee_frames := load("res://assets_v2/godot/melee_ghost_frames.tres") as SpriteFrames
-	var archer_frames := load("res://assets_v2/godot/ghost_archer_frames.tres") as SpriteFrames
-	var boss_frames := load("res://assets_v2/godot/gate_warden_frames.tres") as SpriteFrames
+	var player_frames := load("res://assets_v3/godot/player_frames.tres") as SpriteFrames
+	var melee_frames := load("res://assets_v3/godot/melee_ghost_frames.tres") as SpriteFrames
+	var archer_frames := load("res://assets_v3/godot/ghost_archer_frames.tres") as SpriteFrames
+	var boss_frames := load("res://assets_v3/godot/gate_warden_frames.tres") as SpriteFrames
 	assert_not_null(player_frames, "player SpriteFrames load")
 	assert_not_null(melee_frames, "melee ghost SpriteFrames load")
 	assert_not_null(archer_frames, "Ghost Archer SpriteFrames load")

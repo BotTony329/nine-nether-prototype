@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://bnnbossgate001"]
 
 [ext_resource type="Script" path="res://actors/boss/boss_actor.gd" id="1_boss"]
-[ext_resource type="SpriteFrames" path="res://assets_v2/godot/gate_warden_frames.tres" id="2_frames"]
+[ext_resource type="SpriteFrames" path="res://assets_v3/godot/gate_warden_frames.tres" id="2_frames"]
 [ext_resource type="Script" path="res://core/hurtbox.gd" id="3_hurtbox"]
 [ext_resource type="Script" path="res://core/hitbox.gd" id="4_hitbox"]
 [ext_resource type="Script" path="res://visuals/death_effect.gd" id="5_death_effect"]

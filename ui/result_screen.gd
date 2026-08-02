@@ -1,13 +1,20 @@
 class_name ResultScreen
 extends CanvasLayer
-## End-of-run screen for both outcomes. Restart is requested from the
-## coordinator; the screen does not reset anything itself.
+## End-of-run screen for both outcomes.
+##
+## It reports and then steps aside: `dismissed` is the only thing it does. Who
+## listens decides what happens next — the Ghost Market loop returns to the
+## market, and `main.tscn` played standalone restarts in place. The screen has
+## no opinion, which is what lets both work without a mode flag.
+
+signal dismissed(result: RunResult)
 
 @onready var _title: Label = $Root/Title
 @onready var _summary: Label = $Root/Summary
 @onready var _restart_button: Button = $Root/Restart
 
 var _coordinator: RunCoordinator
+var _result: RunResult
 
 func bind(coordinator: RunCoordinator) -> void:
 	_coordinator = coordinator
@@ -17,12 +24,15 @@ func bind(coordinator: RunCoordinator) -> void:
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	visible = false
-	_restart_button.pressed.connect(_on_restart)
+	_restart_button.pressed.connect(dismiss)
 
-func show_outcome(outcome: StringName) -> void:
+func result() -> RunResult:
+	return _result
+
+func show_outcome(result: RunResult) -> void:
+	_result = result
 	var state := _coordinator.state()
-	var victory := outcome == RunState.STATUS_VICTORY
-	if not victory:
+	if not result.is_victory():
 		var player := _coordinator.player()
 		if (
 			player != null
@@ -30,33 +40,41 @@ func show_outcome(outcome: StringName) -> void:
 			and player.sprite.is_playing()
 		):
 			await player.sprite.animation_finished
-	# Not 同归: the same-death mechanic is not implemented in M1, so a win here
-	# is an ordinary victory and the screen must not claim otherwise.
-	_title.text = "VICTORY" if victory else "DEATH"
-	_title.modulate = Color(0.706, 0.392, 0.118) if victory else Color(0.831, 0.353, 0.294)
+	# Not 同归: the same-death mechanic is not implemented yet, so a win here is
+	# an ordinary victory and the screen must not claim otherwise.
+	_title.text = "VICTORY" if result.is_victory() else "DEATH"
+	_title.modulate = (
+		Color(0.706, 0.392, 0.118) if result.is_victory() else Color(0.831, 0.353, 0.294)
+	)
 	_summary.text = (
-		"Seed  %d\nSacrifices  %d\nAttack  %.1f    Estimated DPS  %.1f\n"
-		+ "Max lifespan  %.0f    Effective HP  %.0f\nIntegrity  %.3f    Imbalance  %.0f"
+		"Seed  %d\nTime  %s    Kills  %d    Sacrifices  %d\n"
+		+ "Attack  %.1f    Estimated DPS  %.1f\n"
+		+ "Max lifespan  %.0f    Effective HP  %.0f\n"
+		+ "Integrity  %.3f    Imbalance  %.0f\nSoul Ash earned  %d"
 	) % [
 		state.run_seed(),
-		state.sacrifice_history().size(),
+		RunResult.format_duration(result.duration_seconds),
+		result.kills,
+		result.sacrifices,
 		state.attack(),
 		state.dps_estimate(),
 		state.max_hp(),
 		state.effective_hp(),
-		state.integrity(),
-		state.imbalance(),
+		result.integrity,
+		result.imbalance,
+		result.soul_ash_earned,
 	]
 	visible = true
 	_restart_button.grab_focus()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if visible and (event.is_action_pressed(&"confirm") or event.is_action_pressed(&"restart_run")):
-		_on_restart()
+		dismiss()
 		get_viewport().set_input_as_handled()
 
-func _on_restart() -> void:
+## Closes the screen and hands control back. Safe to call when already hidden.
+func dismiss() -> void:
 	if not visible:
 		return
 	visible = false
-	_coordinator.restart_run()
+	dismissed.emit(_result)

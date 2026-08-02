@@ -10,16 +10,16 @@ are excluded.
 
 | Current asset | Scene / consumer | Replacement asset | Priority |
 | --- | --- | --- | --- |
-| `assets/player/player_idle.png` | `actors/player/player_frames.tres` | `assets_v3/production/player/player_idle.png` | P0 |
-| `assets/player/player_run.png` | `actors/player/player_frames.tres` | `assets_v3/production/player/player_walk.png` | P0 |
-| `assets/player/player_attack.png` | `actors/player/player_frames.tres` | `assets_v3/production/player/player_attack.png` | P0 |
-| `assets/player/player_hurt.png` | `actors/player/player_frames.tres` | `assets_v3/production/player/player_hurt.png` | P0 |
-| `assets/player/player_death.png` | `actors/player/player_frames.tres` | `assets_v3/production/player/player_death.png` | P0 |
+| `assets/player/player_idle.png` | `assets_v3/godot/player_frames.tres` | `assets_v3/production/player/player_idle.png` | P0 |
+| `assets/player/player_run.png` | `assets_v3/godot/player_frames.tres` | `assets_v3/production/player/player_walk.png` | P0 |
+| `assets/player/player_attack.png` | `assets_v3/godot/player_frames.tres` | `assets_v3/production/player/player_attack.png` | P0 |
+| `assets/player/player_hurt.png` | `assets_v3/godot/player_frames.tres` | `assets_v3/production/player/player_hurt.png` | P0 |
+| `assets/player/player_death.png` | `assets_v3/godot/player_frames.tres` | `assets_v3/production/player/player_death.png` | P0 |
 | `assets/player/player_jump.png` | player jump state | production idle frame reused; no new jump art in Sprint 01 | P0 |
-| `assets/enemy/ghost_melee_*` | `actors/enemies/ghost_melee_frames.tres` | `assets_v3/production/ghost_melee/ghost_melee_*.png` | P0 |
-| `assets/enemy/ghost_archer_*` | `actors/enemies/ghost_archer_frames.tres` | `assets_v3/production/ghost_archer/ghost_archer_*.png` | P0 |
+| `assets/enemy/ghost_melee_*` | `assets_v3/godot/melee_ghost_frames.tres` | `assets_v3/production/ghost_melee/ghost_melee_*.png` | P0 |
+| `assets/enemy/ghost_archer_*` | `assets_v3/godot/ghost_archer_frames.tres` | `assets_v3/production/ghost_archer/ghost_archer_*.png` | P0 |
 | `Polygon2D` arrow fallback | `actors/enemies/ghost_arrow.tscn` | `assets_v3/production/projectiles/ghost_arrow.png` | P0 |
-| `assets/boss/boss_*` | `actors/boss/boss_frames.tres` | `assets_v3/production/gate_warden/gate_warden_*.png` | P0 |
+| `assets/boss/boss_*` | `assets_v3/godot/gate_warden_frames.tres` | `assets_v3/production/gate_warden/gate_warden_*.png` | P0 |
 | `assets/tiles/tile_floor.png` | `scenes/arena.tscn` floor region | `assets_v3/production/environment/stone_floor.png` | P0 |
 | `assets/tiles/tile_stone_brick.png` | arena wall/boundary sprites | `assets_v3/production/environment/stone_wall.png` | P0 |
 | arena tomb/flag focal prop | `scenes/arena.tscn` | `assets_v3/production/environment/fortress_gate.png` | P1 |
