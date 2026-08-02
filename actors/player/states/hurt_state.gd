@@ -10,7 +10,7 @@ func id() -> StringName:
 
 func enter() -> void:
 	_remaining = player.balance().player_hurt_duration
-	player.play(&"hurt")
+	player.play(&"player_hurt")
 	player.sprite.frame = 0
 
 func physics_update(delta: float) -> StringName:

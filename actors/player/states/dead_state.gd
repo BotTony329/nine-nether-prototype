@@ -9,7 +9,7 @@ func enter() -> void:
 	player.input_enabled = false
 	player.velocity = Vector2.ZERO
 	player.attack_hitbox.set_active(false)
-	player.play(&"death")
+	player.play(&"player_death")
 	player.sprite.frame = 0
 
 func physics_update(delta: float) -> StringName:
