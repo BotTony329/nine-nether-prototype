@@ -1,7 +1,7 @@
 # AI Handoff
 
 - **Current branch:** `codex/x02-ghost-archer`
-- **Current phase:** X02 Ghost Archer implemented on the M1 foundation
+- **Current phase:** X02 Ghost Archer implemented on the M1 foundation; PR #4 open
 - **Next owner:** Claude and Game Director for X02 review
 - **Last updated:** 2026-08-02 (Australia/Melbourne)
 
