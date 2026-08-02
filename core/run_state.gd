@@ -180,6 +180,13 @@ func set_stamina_recovery(value: float) -> void:
 	_stamina_recovery = maxf(0.0, value)
 	recalculate_derived()
 
+## Flat base attack, used by meta progression at run creation. Offensive, not
+## structural, so it does not move integrity — a permanent upgrade must not make
+## the body read as more broken or more whole.
+func add_flat_attack(value: float) -> void:
+	_attack = maxf(0.0, _attack + value)
+	recalculate_derived()
+
 func add_additive(value: float) -> void:
 	_additive_sum += value
 	recalculate_derived()

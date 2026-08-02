@@ -1,0 +1,167 @@
+[gd_scene load_steps=8 format=3 uid="uid://bnnghostmarket"]
+
+[ext_resource type="Script" path="res://scenes/ghost_market.gd" id="1_market"]
+[ext_resource type="Texture2D" path="res://assets/background/bg_deep.png" id="2_bg_deep"]
+[ext_resource type="Texture2D" path="res://assets/tiles/tile_floor.png" id="3_floor"]
+[ext_resource type="Texture2D" path="res://assets/tiles/tile_stone_brick.png" id="4_brick"]
+[ext_resource type="Texture2D" path="res://assets/tiles/tile_brazier.png" id="5_brazier"]
+[ext_resource type="Texture2D" path="res://assets/effects/effect_ghost_fire.png" id="6_ghost_fire"]
+[ext_resource type="Texture2D" path="res://assets/icons/ui/icon_ghostfire.png" id="7_icon"]
+
+[node name="GhostMarket" type="Node2D"]
+script = ExtResource("1_market")
+
+[node name="Void" type="CanvasLayer" parent="."]
+layer = -3
+
+[node name="Fill" type="ColorRect" parent="Void"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.058, 0.047, 0.07, 1)
+
+[node name="Backdrop" type="CanvasLayer" parent="."]
+layer = -2
+
+[node name="Deep" type="Sprite2D" parent="Backdrop"]
+texture_repeat = 2
+position = Vector2(0, 124)
+centered = false
+texture = ExtResource("2_bg_deep")
+region_enabled = true
+region_rect = Rect2(0, 0, 640, 180)
+modulate = Color(0.72, 0.7, 0.8, 1)
+
+[node name="Scenery" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="Wall" type="Sprite2D" parent="Scenery"]
+texture_repeat = 2
+position = Vector2(0, 112)
+centered = false
+texture = ExtResource("4_brick")
+region_enabled = true
+region_rect = Rect2(0, 0, 640, 192)
+modulate = Color(0.55, 0.53, 0.6, 1)
+
+[node name="Floor" type="Sprite2D" parent="Scenery"]
+texture_repeat = 2
+position = Vector2(0, 304)
+centered = false
+texture = ExtResource("3_floor")
+region_enabled = true
+region_rect = Rect2(0, 0, 640, 56)
+
+[node name="BrazierLeft" type="Sprite2D" parent="Scenery"]
+position = Vector2(56, 272)
+centered = false
+texture = ExtResource("5_brazier")
+
+[node name="FireLeft" type="Sprite2D" parent="Scenery"]
+position = Vector2(48, 232)
+centered = false
+texture = ExtResource("6_ghost_fire")
+modulate = Color(1, 1, 1, 0.75)
+
+[node name="BrazierRight" type="Sprite2D" parent="Scenery"]
+position = Vector2(552, 272)
+centered = false
+texture = ExtResource("5_brazier")
+
+[node name="FireRight" type="Sprite2D" parent="Scenery"]
+position = Vector2(544, 232)
+centered = false
+texture = ExtResource("6_ghost_fire")
+modulate = Color(1, 1, 1, 0.75)
+
+[node name="Ui" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="Root" type="Control" parent="Ui"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Title" type="Label" parent="Ui/Root"]
+offset_left = 120.0
+offset_top = 8.0
+offset_right = 520.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(0.706, 0.392, 0.118, 1)
+theme_override_font_sizes/font_size = 16
+text = "鬼市 — GHOST MARKET"
+horizontal_alignment = 1
+
+[node name="Panel" type="Panel" parent="Ui/Root"]
+offset_left = 96.0
+offset_top = 40.0
+offset_right = 544.0
+offset_bottom = 318.0
+
+[node name="Icon" type="TextureRect" parent="Ui/Root/Panel"]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 42.0
+offset_bottom = 42.0
+texture = ExtResource("7_icon")
+
+[node name="SoulAsh" type="Label" parent="Ui/Root/Panel"]
+offset_left = 48.0
+offset_top = 12.0
+offset_right = 300.0
+offset_bottom = 34.0
+theme_override_colors/font_color = Color(0.706, 0.392, 0.118, 1)
+theme_override_font_sizes/font_size = 14
+text = "Soul Ash   0"
+
+[node name="Profile" type="Label" parent="Ui/Root/Panel"]
+offset_left = 48.0
+offset_top = 34.0
+offset_right = 438.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.463, 0.451, 0.416, 1)
+theme_override_font_sizes/font_size = 9
+text = "Runs 0    Victories 0    Deaths 0"
+
+[node name="LastRun" type="Label" parent="Ui/Root/Panel"]
+offset_left = 12.0
+offset_top = 58.0
+offset_right = 436.0
+offset_bottom = 104.0
+theme_override_colors/font_color = Color(0.769, 0.722, 0.604, 1)
+theme_override_font_sizes/font_size = 9
+autowrap_mode = 2
+text = "Last run
+  none yet"
+
+[node name="Upgrade" type="Label" parent="Ui/Root/Panel"]
+offset_left = 12.0
+offset_top = 112.0
+offset_right = 436.0
+offset_bottom = 152.0
+theme_override_colors/font_color = Color(0.769, 0.722, 0.604, 1)
+theme_override_font_sizes/font_size = 9
+autowrap_mode = 2
+text = "Tempered Blade"
+
+[node name="Buy" type="Button" parent="Ui/Root/Panel"]
+offset_left = 12.0
+offset_top = 158.0
+offset_right = 200.0
+offset_bottom = 182.0
+theme_override_font_sizes/font_size = 10
+text = "Buy Tempered Blade"
+
+[node name="Start" type="Button" parent="Ui/Root/Panel"]
+offset_left = 12.0
+offset_top = 196.0
+offset_right = 436.0
+offset_bottom = 228.0
+theme_override_font_sizes/font_size = 13
+text = "Start Run   (Enter)"
+
+[node name="Reset" type="Button" parent="Ui/Root/Panel"]
+offset_left = 12.0
+offset_top = 238.0
+offset_right = 140.0
+offset_bottom = 262.0
+theme_override_font_sizes/font_size = 9
+text = "Reset Save"
