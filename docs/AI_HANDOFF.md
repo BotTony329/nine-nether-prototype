@@ -1,8 +1,8 @@
 # AI Handoff
 
-- **Current branch:** `codex/x02-ghost-archer`
-- **Current phase:** X02 Ghost Archer implemented on the M1 foundation; PR #4 open
-- **Next owner:** Claude and Game Director for X02 review
+- **Current branch:** `codex/production-asset-sprint-01`
+- **Current phase:** Approved Art V3 production assets integrated into the playable M1 framework
+- **Next owner:** Art Director and Game Director for visual review
 - **Last updated:** 2026-08-02 (Australia/Melbourne)
 
 ---
@@ -15,7 +15,21 @@ sharper and structurally weaker → fight the prototype Boss → victory or deat
 restart.
 
 Verified by the automated run-loop case and by capturing frames under a virtual
-display during development. Engine: Godot 4.3 stable.
+display during development. Current local validation: Godot 4.7.1 stable;
+project compatibility and CI remain Godot 4.3.
+
+## Art V3 production sprint
+
+The approved `assets_v3/review/` lineup is now represented by production-ready
+Player, Ghost Melee, Ghost Archer, and mounted Gate Warden animation strips.
+Environment tiles, gate, fog, Ghost Arrow, combat effects, and the three live
+HUD icons were also replaced. Runtime presentation observes `EventBus` for
+damage numbers, slash/hit/blood/death feedback, hit flash, small camera shake,
+and small hit stop; it does not alter the frozen damage or state architecture.
+
+Exact file mapping, frame metadata, scene-local foot alignment, screenshots,
+known fallbacks, and remaining placeholders are recorded in
+`docs/PRODUCTION_ASSET_REPLACEMENT.md`.
 
 ## Implemented systems
 
@@ -37,7 +51,7 @@ display during development. Engine: Godot 4.3 stable.
 | Arena | One fixed 1024×360 space, collision, spawns, parallax, camera bounds |
 | UI | HUD, sacrifice preview/confirm, death and victory screens, restart |
 | Debug | Panel plus 9 commands, all routed through `RunCoordinator` |
-| Tests + CI | 52 tests / 205 assertions; `godot-tests` workflow |
+| Tests + CI | 64 tests / 438 assertions; `godot-tests` workflow |
 
 ## Frozen interfaces
 
@@ -93,9 +107,8 @@ director, and the Boss `PhaseController`.
 
 ## Known issues
 
-1. **`assets/effects/*.png` are single-frame.** All four are 48×48 while
-   `assets/effects/metadata.md` specifies 2–4 frames (96×48 to 192×48). No VFX
-   are used in M1. WorkBuddy needs to re-export the strips.
+1. **The old `assets/effects/*.png` remain archival.** Live M1 combat feedback
+   now uses the animated Art V3 effects under `assets_v3/production/effects/`.
 2. **The Boss has one attack.** `assets/boss/` ships one attack sheet, so the
    charge and the ground slam from A14/X04 are absent (ADR-010). The fight is a
    readable pattern with one answer — thin on purpose, not by oversight.
@@ -109,15 +122,16 @@ director, and the Boss `PhaseController`.
 6. **No telemetry persistence.** Events are emitted with a correlation envelope
    but nothing writes them to disk (X07).
 7. **No audio.** Out of scope for M1.
-8. **Placeholder art everywhere.** Magenta border = placeholder, per
-   `docs/ART_SPEC.md` section 5.
-9. **The Ghost Arrow has no supplied sprite.** X02 uses a small procedural
-   polygon fallback in `ghost_arrow.tscn`; replace only the `FallbackVisual`
-   when approved projectile art arrives. Collision and behaviour are final.
+8. **Some presentation remains pre-V3.** Deep/tree/chain parallax layers and
+   health/stamina bar frames remain by Sprint 01 scope; see the replacement
+   matrix for the bounded Sprint 02 recommendation.
+9. **Player jump uses an idle-frame fallback.** No jump/fall production set was
+   authored because the approved Sprint 01 animation list contained only idle,
+   walk, attack, hurt, and death.
 
 ## Test status
 
-- **Last successful run:** 2026-08-02 — 59 tests, 229 assertions, 0 failures,
+- **Last successful run:** 2026-08-02 — 64 tests, 438 assertions, 0 failures,
   Godot 4.7.1 stable headless locally. Existing CI remains pinned to Godot 4.3.
 - **Command:** `godot --headless --import` then
   `godot --headless --path . res://tests/test_runner.tscn`
