@@ -1,16 +1,42 @@
 # AI Handoff
 
-- **Current branch:** `codex/m15-art-v2-integration`
-- **Current phase:** M1.5 Art V2 integrated; draft PR #6 open for review
-- **Next owner:** Claude and Game Director for visual/gameplay review
+- **Current branch:** `claude/m2-minimal-loop` (draft PR into `develop`, unmerged)
+- **Current phase:** M2 Ghost Market loop delivered on top of M1.5 Art V2
+- **Next owner:** Game Director for review
 - **Last updated:** 2026-08-02 (Australia/Melbourne)
 
 ## Playable status
+
+The game now opens in the **Ghost Market**: start a run, fight, die or win, read
+the run result, return to the market with soul ash banked, buy the one upgrade,
+run again. See `docs/GHOST_MARKET_LOOP.md`.
 
 The complete M1 loop remains playable: arena wave → sacrifice → Gate Warden →
 victory/defeat → restart. Normal gameplay now renders the production V2 player,
 melee ghost, Ghost Archer, Ghost Arrow, Gate Warden, combat effects, and matching
 HUD icons. Debug collision shapes remain off by default and available on F8.
+
+## M2 Ghost Market loop
+
+| Piece | Where |
+| --- | --- |
+| Main scene | `scenes/app.tscn` — owns `MetaState`, swaps market and run |
+| Hub | `scenes/ghost_market.tscn` — soul ash, latest run, one upgrade, start, reset |
+| Persisted state | `core/meta_state.gd` — soul ash, runs, deaths, victories, Tempered Blade |
+| Run summary | `systems/run_result.gd` — outcome, duration, kills, sacrifices, integrity, imbalance, soul ash |
+| Save | `core/meta_save.gd` — `user://meta_save.json`, versioned, path injectable |
+| Meta tunables | `data/meta_config.tres` — reward rates and upgrade cost, apart from `BalanceConfig` |
+
+Death and victory share one run-end pipeline; duplicate end requests are ignored
+at both the coordinator and the app layer. Combat, enemy AI, the sacrifice
+system, balance values, art and animations were not modified. The two changes to
+existing gameplay code are recorded as ADR-012 (`run_finished` now carries a
+`RunResult`; `RunState.add_flat_attack` added) and ADR-013 (one live child scene
+rather than hiding the idle one — a hidden `Node2D` does not hide its
+`CanvasLayer` children, and the market was drawing over the run).
+
+Market visuals reuse existing floor, brick, brazier and ghost-fire art and are
+decoration only: no script reads them, so real market art changes no code.
 
 ## M1.5 integration
 
@@ -65,8 +91,8 @@ actor/state scripts and scenes.
 
 ## Tests
 
-- **Local:** 66 tests, 421 assertions, 0 failures
-- **Engine:** Godot 4.7.1 stable headless locally; CI remains pinned to 4.3
+- **Local:** 78 tests, 484 assertions, 0 failures (12 new in `tests/cases/test_meta_loop.gd`)
+- **Engine:** Godot 4.3 stable headless for the M2 run; CI is pinned to 4.3
 - **Commands:**
   - `godot --headless --import`
   - `godot --headless --path . res://tests/test_runner.tscn`
@@ -90,6 +116,14 @@ added.
 4. Combat has no audio; audio integration remains outside M1.5 scope.
 5. X04 now has a second supplied attack strip, but still depends on the Boss
    `PhaseController` / `AttackScheduler` foundation and an approved move design.
+6. Meta progression is one currency and one upgrade. No upgrade tree, no meta
+   unlocks touching the sacrifice pool or enemy roster, no multiple profiles.
+7. **Engine version drift.** `project.godot` declares `4.3`, `godot-tests` pins
+   `4.3-stable`, but the committed `assets_v2/**.import` files carry Godot 4.4+
+   keys (`compress/uastc_level`, `process/channel_remap/*`) and the M1.5 handoff
+   reports local work on 4.7.1. Opening the project on 4.3 rewrites those files.
+   They were reverted rather than committed on this branch. The team should pick
+   one engine version and align `project.godot`, CI and local tooling.
 
 ## Frozen interfaces
 

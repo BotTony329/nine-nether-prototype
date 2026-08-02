@@ -235,3 +235,44 @@ Append decisions in this format; do not rewrite accepted history.
   must use the existing configured timer as a documented fallback. Only actions
   already supported by gameplay are mapped.
 - **Interfaces affected:** none. No frozen or protected framework file changed.
+
+## ADR-012: `run_finished` carries a `RunResult` instead of a bare outcome
+
+- **Status:** Accepted
+- **Date:** 2026-08-02
+- **Owner:** Claude
+- **Context:** M2 needs duration, kills, sacrifices, integrity and imbalance at
+  the moment a run ends, and needs death and victory to travel one path. The
+  frozen signature was `run_finished(outcome: StringName)`, which forced every
+  listener to reach back into `RunCoordinator` and reassemble the figures — a
+  second place where "what the run amounted to" would be defined.
+- **Decision:** `RunCoordinator._finish_run` builds a `RunResult` and emits it.
+  `RunCoordinator` gains a kill count and a start timestamp; `RunState` gains
+  `add_flat_attack` for meta progression. Nothing else in the run changes:
+  `CombatResolver`, enemy AI, the sacrifice system and `BalanceConfig` are
+  untouched.
+- **Consequences:** One listener needed updating (`ResultScreen`). Any future
+  telemetry sink gets the whole picture from the payload. `RunResult` is a plain
+  value, so it outlives the run scene and a test can build one by hand.
+- **Interfaces affected:** `RunCoordinator.run_finished`,
+  `ResultScreen.show_outcome`, `RunState.add_flat_attack` (additive).
+
+## ADR-013: One live child scene, rather than hiding the idle one
+
+- **Status:** Accepted
+- **Date:** 2026-08-02
+- **Owner:** Claude
+- **Context:** The first Ghost Market implementation kept both scenes in the
+  tree and toggled `visible` on the idle one. It drew the market's title, panel
+  and braziers straight over the running game. `GhostMarket` and `Main` are
+  `Node2D`s whose UI lives on `CanvasLayer` children, and a `CanvasLayer` does
+  not inherit visibility from a parent `Node2D`.
+- **Decision:** `App` instantiates and frees. Exactly one of the market and the
+  run exists at any moment.
+- **Consequences:** No visibility subtleties and no stale nodes between runs; a
+  second run rebuilds the run scene from scratch, which is a stronger reset than
+  `_clear_actors`. The in-scene restart path (debug `R`) still relies on
+  `_clear_actors` and has its own test. Rebuilding a scene per transition is
+  negligible at this size.
+- **Interfaces affected:** `App.market()` / `App.run()` return null when the
+  other is active.
