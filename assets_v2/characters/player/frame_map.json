@@ -1,0 +1,277 @@
+{
+  "character": "player",
+  "frame_size": [
+    96,
+    96
+  ],
+  "pivot": [
+    48,
+    66
+  ],
+  "foot_position": [
+    48,
+    88
+  ],
+  "animations": {
+    "player_idle": {
+      "frames": 8,
+      "fps": 8.0,
+      "loop": true,
+      "phases": {
+        "startup": [],
+        "active": [],
+        "recovery": []
+      },
+      "pivot": [
+        48,
+        66
+      ],
+      "foot_position": [
+        48,
+        88
+      ],
+      "frame_size": [
+        96,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "breathing idle"
+    },
+    "player_run": {
+      "frames": 8,
+      "fps": 12.0,
+      "loop": true,
+      "phases": {
+        "startup": [],
+        "active": [],
+        "recovery": []
+      },
+      "pivot": [
+        48,
+        66
+      ],
+      "foot_position": [
+        48,
+        88
+      ],
+      "frame_size": [
+        96,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "forward run, cloth trailing"
+    },
+    "player_jump": {
+      "frames": 3,
+      "fps": 10.0,
+      "loop": false,
+      "phases": {
+        "startup": [],
+        "active": [],
+        "recovery": []
+      },
+      "pivot": [
+        48,
+        66
+      ],
+      "foot_position": [
+        48,
+        88
+      ],
+      "frame_size": [
+        96,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "rise"
+    },
+    "player_fall": {
+      "frames": 3,
+      "fps": 10.0,
+      "loop": false,
+      "phases": {
+        "startup": [],
+        "active": [],
+        "recovery": []
+      },
+      "pivot": [
+        48,
+        66
+      ],
+      "foot_position": [
+        48,
+        88
+      ],
+      "frame_size": [
+        96,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "descent"
+    },
+    "player_light_attack_1": {
+      "frames": 8,
+      "fps": 12.0,
+      "loop": false,
+      "phases": {
+        "startup": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "active": [
+          4,
+          5
+        ],
+        "recovery": [
+          6,
+          7
+        ]
+      },
+      "pivot": [
+        48,
+        66
+      ],
+      "foot_position": [
+        48,
+        88
+      ],
+      "frame_size": [
+        96,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "horizontal sabre slash R->L"
+    },
+    "player_light_attack_2": {
+      "frames": 8,
+      "fps": 12.0,
+      "loop": false,
+      "phases": {
+        "startup": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "active": [
+          4,
+          5
+        ],
+        "recovery": [
+          6,
+          7
+        ]
+      },
+      "pivot": [
+        48,
+        66
+      ],
+      "foot_position": [
+        48,
+        88
+      ],
+      "frame_size": [
+        96,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "reverse diagonal overhead->back"
+    },
+    "player_heavy_attack": {
+      "frames": 10,
+      "fps": 10.0,
+      "loop": false,
+      "phases": {
+        "startup": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "active": [
+          6,
+          7
+        ],
+        "recovery": [
+          8,
+          9
+        ]
+      },
+      "pivot": [
+        48,
+        66
+      ],
+      "foot_position": [
+        48,
+        88
+      ],
+      "frame_size": [
+        96,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "deep coil, late big hit"
+    },
+    "player_hurt": {
+      "frames": 4,
+      "fps": 10.0,
+      "loop": false,
+      "phases": {
+        "startup": [],
+        "active": [],
+        "recovery": []
+      },
+      "pivot": [
+        48,
+        66
+      ],
+      "foot_position": [
+        48,
+        88
+      ],
+      "frame_size": [
+        96,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "recoil"
+    },
+    "player_death": {
+      "frames": 10,
+      "fps": 8.0,
+      "loop": false,
+      "phases": {
+        "startup": [],
+        "active": [],
+        "recovery": []
+      },
+      "pivot": [
+        48,
+        66
+      ],
+      "foot_position": [
+        48,
+        88
+      ],
+      "frame_size": [
+        96,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "stagger and collapse"
+    }
+  }
+}

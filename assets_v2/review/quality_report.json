@@ -1,0 +1,122 @@
+{
+  "checks": [
+    {
+      "name": "1.size",
+      "status": "PASS",
+      "detail": "all 37 sheets match frames*fw x fh"
+    },
+    {
+      "name": "2.frame-diff",
+      "status": "WARN",
+      "detail": "low-motion pairs: player_run f3->f4 (114/9216 ~1.2%); melee_ghost_attack f0->f1 (109/9216 ~1.2%); corpse_beast_charge_windup f0->f1 (129/12288 ~1.0%); corpse_beast_charge_windup f1->f2 (170/12288 ~1.4%); corpse_beast_charge_windup f3->f4 (147/12288 ~1.2%); corpse_beast_charge_windup f4->f5 (168/12288 ~1.4%); corpse_beast_wall_impact f2->f3 (163/12288 ~1.3%); corpse_beast_hurt f2->f3 (167/12288 ~1.4%)"
+    },
+    {
+      "name": "3.alpha",
+      "status": "PASS",
+      "detail": "transparent background on all sheets"
+    },
+    {
+      "name": "4.silhouette",
+      "status": "WARN",
+      "detail": "similar shape pair(s): player~melee_ghost=0.967; player~gate_warden=0.934; melee_ghost~gate_warden=0.921 (humanoids share a body plan; distinguished in-game by colour/weapon/lean)"
+    },
+    {
+      "name": "5.telegraph",
+      "status": "PASS",
+      "detail": "all strikes have non-empty active window"
+    },
+    {
+      "name": "6.foot",
+      "status": "PASS",
+      "detail": "foot baseline stable on idle/walk/run (<8% frame height)"
+    },
+    {
+      "name": "7.weapon",
+      "status": "WARN",
+      "detail": "gate_warden_attack_2 motion range only 9%"
+    },
+    {
+      "name": "8.scale-preview",
+      "status": "PASS",
+      "detail": "review/gameplay_scale_preview.png (640x360)"
+    },
+    {
+      "name": "9.gif",
+      "status": "PASS",
+      "detail": "anim_player.gif (38 frames)"
+    },
+    {
+      "name": "9.gif",
+      "status": "PASS",
+      "detail": "anim_enemies_melee.gif (22 frames)"
+    },
+    {
+      "name": "9.gif",
+      "status": "PASS",
+      "detail": "anim_enemies_archer.gif (16 frames)"
+    },
+    {
+      "name": "9.gif",
+      "status": "PASS",
+      "detail": "anim_enemies_beast.gif (18 frames)"
+    },
+    {
+      "name": "9.gif",
+      "status": "PASS",
+      "detail": "anim_boss.gif (38 frames)"
+    }
+  ],
+  "silhouette_similarity": [
+    {
+      "a": "player",
+      "b": "melee_ghost",
+      "similarity": 0.967
+    },
+    {
+      "a": "player",
+      "b": "ghost_archer",
+      "similarity": 0.841
+    },
+    {
+      "a": "player",
+      "b": "corpse_beast",
+      "similarity": -0.269
+    },
+    {
+      "a": "player",
+      "b": "gate_warden",
+      "similarity": 0.934
+    },
+    {
+      "a": "melee_ghost",
+      "b": "ghost_archer",
+      "similarity": 0.826
+    },
+    {
+      "a": "melee_ghost",
+      "b": "corpse_beast",
+      "similarity": -0.277
+    },
+    {
+      "a": "melee_ghost",
+      "b": "gate_warden",
+      "similarity": 0.921
+    },
+    {
+      "a": "ghost_archer",
+      "b": "corpse_beast",
+      "similarity": -0.399
+    },
+    {
+      "a": "ghost_archer",
+      "b": "gate_warden",
+      "similarity": 0.795
+    },
+    {
+      "a": "corpse_beast",
+      "b": "gate_warden",
+      "similarity": -0.226
+    }
+  ],
+  "result": "WARN"
+}

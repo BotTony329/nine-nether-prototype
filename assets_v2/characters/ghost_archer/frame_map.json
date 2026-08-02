@@ -1,0 +1,182 @@
+{
+  "character": "ghost_archer",
+  "frame_size": [
+    96,
+    96
+  ],
+  "pivot": [
+    48,
+    64
+  ],
+  "foot_position": [
+    48,
+    88
+  ],
+  "animations": {
+    "ghost_archer_idle": {
+      "frames": 6,
+      "fps": 8.0,
+      "loop": true,
+      "phases": {
+        "startup": [],
+        "active": [],
+        "recovery": []
+      },
+      "pivot": [
+        48,
+        64
+      ],
+      "foot_position": [
+        48,
+        88
+      ],
+      "frame_size": [
+        96,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "still draw, ghost fire"
+    },
+    "ghost_archer_retreat": {
+      "frames": 8,
+      "fps": 10.0,
+      "loop": true,
+      "phases": {
+        "startup": [],
+        "active": [],
+        "recovery": []
+      },
+      "pivot": [
+        48,
+        64
+      ],
+      "foot_position": [
+        48,
+        88
+      ],
+      "frame_size": [
+        96,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "back-step kiting"
+    },
+    "ghost_archer_aim": {
+      "frames": 6,
+      "fps": 8.0,
+      "loop": false,
+      "phases": {
+        "startup": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "active": [],
+        "recovery": [
+          5
+        ]
+      },
+      "pivot": [
+        48,
+        64
+      ],
+      "foot_position": [
+        48,
+        88
+      ],
+      "frame_size": [
+        96,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": 5,
+      "note": "draw bow, charge_ready at 5"
+    },
+    "ghost_archer_shoot": {
+      "frames": 4,
+      "fps": 14.0,
+      "loop": false,
+      "phases": {
+        "startup": [
+          0
+        ],
+        "active": [
+          1
+        ],
+        "recovery": [
+          2,
+          3
+        ]
+      },
+      "pivot": [
+        48,
+        64
+      ],
+      "foot_position": [
+        48,
+        88
+      ],
+      "frame_size": [
+        96,
+        96
+      ],
+      "projectile_release_frame": 1,
+      "charge_ready_frame": null,
+      "note": "release; projectile at frame 1"
+    },
+    "ghost_archer_hurt": {
+      "frames": 4,
+      "fps": 10.0,
+      "loop": false,
+      "phases": {
+        "startup": [],
+        "active": [],
+        "recovery": []
+      },
+      "pivot": [
+        48,
+        64
+      ],
+      "foot_position": [
+        48,
+        88
+      ],
+      "frame_size": [
+        96,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "recoil"
+    },
+    "ghost_archer_death": {
+      "frames": 8,
+      "fps": 8.0,
+      "loop": false,
+      "phases": {
+        "startup": [],
+        "active": [],
+        "recovery": []
+      },
+      "pivot": [
+        48,
+        64
+      ],
+      "foot_position": [
+        48,
+        88
+      ],
+      "frame_size": [
+        96,
+        96
+      ],
+      "projectile_release_frame": null,
+      "charge_ready_frame": null,
+      "note": "dissolve"
+    }
+  }
+}
