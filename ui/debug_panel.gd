@@ -44,7 +44,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_note("damaged %.0f" % DAMAGE_AMOUNT)
 	elif event.is_action_pressed(&"debug_spawn_enemy"):
 		_coordinator.debug_spawn_reference_enemy()
-		_note("spawned reference enemy")
+		_note("spawned Ghost Archer")
 	elif event.is_action_pressed(&"debug_start_boss"):
 		_coordinator.begin_boss()
 		_note("boss encounter started")
