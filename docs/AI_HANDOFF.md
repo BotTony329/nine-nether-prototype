@@ -1,16 +1,35 @@
 # AI Handoff
 
-- **Current branch:** `codex/m15-art-v2-integration`
-- **Current phase:** M1.5 Art V2 integrated; draft PR #6 open for review
-- **Next owner:** Claude and Game Director for visual/gameplay review
+- **Current branch:** `codex/production-asset-sprint-01`
+- **Current phase:** Art V3 production assets integrated on the latest `develop`
+- **Next owner:** Game Director for Draft PR #8 review
 - **Last updated:** 2026-08-02 (Australia/Melbourne)
 
 ## Playable status
 
 The complete M1 loop remains playable: arena wave → sacrifice → Gate Warden →
-victory/defeat → restart. Normal gameplay now renders the production V2 player,
-melee ghost, Ghost Archer, Ghost Arrow, Gate Warden, combat effects, and matching
-HUD icons. Debug collision shapes remain off by default and available on F8.
+victory/defeat → restart. Normal gameplay now renders the approved Art V3
+player, melee ghost, Ghost Archer, Ghost Arrow, Gate Warden, environment,
+combat effects, and primary HUD icons. Develop's gameplay architecture,
+authored attack timing, collision geometry, and additional HUD statistics are
+preserved. Debug collision shapes remain off by default and available on F8.
+
+## Art V3 production integration
+
+The V3 production strips are mapped into develop's established animation names
+and frame-event contracts. Where a four- or five-pose approved strip is shorter
+than develop's authored timing map, source poses are deliberately held across
+multiple frames; this preserves startup, active, release, and recovery events
+without changing gameplay scripts. Scene-local sprite position and scale keep
+each declared V3 foot position on the stable actor origin. Combat feedback uses
+the V3 slash, hit, blood, and death sheets, while damage remains exclusively in
+`CombatResolver`.
+
+The merge with current `develop` retained its player, melee ghost, Ghost Archer,
+Boss, HUD, result-flow, and debug integration. The hidden Ghost Arrow polygon is
+kept only as develop's emergency fallback; normal rendering uses the V3 arrow.
+See `docs/PRODUCTION_ASSET_REPLACEMENT.md` and the V3 production `frame_map.json`
+files for the replacement inventory and metadata.
 
 ## M1.5 integration
 
@@ -65,7 +84,7 @@ actor/state scripts and scenes.
 
 ## Tests
 
-- **Local:** 66 tests, 421 assertions, 0 failures
+- **Local:** 71 tests, 686 assertions, 0 failures
 - **Engine:** Godot 4.7.1 stable headless locally; CI remains pinned to 4.3
 - **Commands:**
   - `godot --headless --import`

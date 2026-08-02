@@ -1,5 +1,5 @@
 extends TestCase
-## M1.5 Art V2 resource, state mapping and authored-frame timing coverage.
+## Develop animation contracts mapped onto the approved Art V3 production art.
 
 const MAIN_SCENE := "res://scenes/main.tscn"
 const PLAYER_SCENE := "res://actors/player/player.tscn"
@@ -43,7 +43,7 @@ func _spawn_enemy(scene_path: String, config_path: String, target: Node2D) -> En
 	return enemy
 
 
-func test_all_integrated_v2_resources_load_with_declared_animations() -> void:
+func test_all_integrated_resources_load_with_declared_animations() -> void:
 	var player_frames := load("res://assets_v2/godot/player_frames.tres") as SpriteFrames
 	var melee_frames := load("res://assets_v2/godot/melee_ghost_frames.tres") as SpriteFrames
 	var archer_frames := load("res://assets_v2/godot/ghost_archer_frames.tres") as SpriteFrames
@@ -56,12 +56,12 @@ func test_all_integrated_v2_resources_load_with_declared_animations() -> void:
 	assert_equal(melee_frames.get_frame_count(&"melee_ghost_attack"), 8, "melee attack has 8 frames")
 	assert_equal(archer_frames.get_frame_count(&"ghost_archer_shoot"), 4, "archer shoot has 4 frames")
 	assert_equal(boss_frames.get_frame_count(&"gate_warden_attack_1"), 10, "Boss attack has 10 frames")
-	assert_not_null(load("res://assets_v2/projectiles/ghost_fire_arrow.png"), "Ghost Arrow texture imports")
-	assert_not_null(load("res://assets_v2/effects/hit.png"), "hit effect imports")
-	assert_not_null(load("res://assets_v2/effects/blade_slash.png"), "slash effect imports")
+	assert_not_null(load("res://assets_v3/production/projectiles/ghost_arrow.png"), "V3 Ghost Arrow texture imports")
+	assert_not_null(load("res://assets_v3/production/effects/hit.png"), "V3 hit effect imports")
+	assert_not_null(load("res://assets_v3/production/effects/slash.png"), "V3 slash effect imports")
 
 
-func test_actor_scenes_use_v2_frames_and_stable_foot_offsets() -> void:
+func test_actor_scenes_use_v3_frames_and_stable_foot_positions() -> void:
 	var player := (load(PLAYER_SCENE) as PackedScene).instantiate() as Player
 	var melee := (load(MELEE_SCENE) as PackedScene).instantiate() as MeleeGhost
 	var archer := (load(ARCHER_SCENE) as PackedScene).instantiate() as GhostArcher
@@ -69,14 +69,14 @@ func test_actor_scenes_use_v2_frames_and_stable_foot_offsets() -> void:
 	for actor in [player, melee, archer, boss]:
 		tree.root.add_child(actor)
 		_spawned.append(actor)
-	assert_equal(player.sprite.offset, Vector2(-48, -88), "player feet use V2 baseline")
-	assert_equal(melee.sprite.offset, Vector2(-48, -90), "melee feet use V2 baseline")
-	assert_equal(archer.sprite.offset, Vector2(-48, -88), "archer feet use V2 baseline")
-	assert_equal(boss.sprite.offset, Vector2(-96, -176), "Boss feet use V2 baseline")
+	assert_almost(player.sprite.position.y + (150.0 - 80.0) * player.sprite.scale.y, 0.0, "player V3 feet meet actor origin", 0.01)
+	assert_almost(melee.sprite.position.y + (150.0 - 80.0) * melee.sprite.scale.y, 0.0, "melee V3 feet meet actor origin", 0.01)
+	assert_almost(archer.sprite.position.y + (150.0 - 80.0) * archer.sprite.scale.y, 0.0, "archer V3 feet meet actor origin", 0.01)
+	assert_almost(boss.sprite.position.y + (248.0 - 128.0) * boss.sprite.scale.y, 0.0, "Boss V3 feet meet actor origin", 0.01)
 	var arrow := (load(ARROW_SCENE) as PackedScene).instantiate() as GhostArrow
 	tree.root.add_child(arrow)
 	_spawned.append(arrow)
-	assert_true(arrow.uses_v2_texture(), "normal projectile rendering uses the supplied V2 texture")
+	assert_true(arrow.uses_v2_texture(), "normal projectile rendering uses the supplied V3 texture")
 	assert_false(arrow.get_node("FallbackVisual").visible, "procedural fallback is hidden")
 
 

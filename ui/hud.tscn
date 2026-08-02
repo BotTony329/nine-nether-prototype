@@ -1,13 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://bnnhud0000001"]
+[gd_scene load_steps=10 format=3 uid="uid://bnnhud0000001"]
 
 [ext_resource type="Script" path="res://ui/hud.gd" id="1_hud"]
 [ext_resource type="Texture2D" path="res://assets/ui/ui_health_bar.png" id="2_health_bar"]
 [ext_resource type="Texture2D" path="res://assets/ui/ui_stamina_bar.png" id="3_stamina_bar"]
-[ext_resource type="Texture2D" path="res://assets_v2/icons/icon_yang.png" id="4_icon_hp"]
-[ext_resource type="Texture2D" path="res://assets_v2/icons/icon_obsession.png" id="5_icon_boss"]
+[ext_resource type="Texture2D" path="res://assets_v3/production/icons/icon_hp.png" id="4_icon_hp"]
+[ext_resource type="Texture2D" path="res://assets_v3/production/icons/icon_boss.png" id="5_icon_boss"]
 [ext_resource type="Texture2D" path="res://assets_v2/icons/icon_qi.png" id="6_icon_qi"]
 [ext_resource type="Texture2D" path="res://assets_v2/icons/icon_songdao.png" id="7_icon_attack"]
 [ext_resource type="Texture2D" path="res://assets_v2/icons/icon_ghostfire.png" id="8_icon_imbalance"]
+[ext_resource type="Texture2D" path="res://assets_v2/icons/icon_obsession.png" id="9_icon_integrity"]
 
 [node name="Hud" type="CanvasLayer"]
 script = ExtResource("1_hud")
@@ -23,6 +24,7 @@ offset_right = 22.0
 offset_bottom = 22.0
 texture = ExtResource("4_icon_hp")
 expand_mode = 1
+stretch_mode = 5
 
 [node name="StaminaIcon" type="TextureRect" parent="Player"]
 offset_left = 6.0
@@ -84,7 +86,7 @@ offset_left = 6.0
 offset_top = 61.0
 offset_right = 20.0
 offset_bottom = 75.0
-texture = ExtResource("5_icon_boss")
+texture = ExtResource("9_icon_integrity")
 expand_mode = 1
 
 [node name="ImbalanceIcon" type="TextureRect" parent="Player"]
@@ -107,6 +109,7 @@ offset_right = 36.0
 offset_bottom = 36.0
 texture = ExtResource("5_icon_boss")
 expand_mode = 1
+stretch_mode = 5
 
 [node name="BossBar" type="TextureRect" parent="Boss"]
 offset_left = 40.0

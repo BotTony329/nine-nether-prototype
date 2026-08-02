@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bnnsacpanel001"]
 
 [ext_resource type="Script" path="res://ui/sacrifice_panel.gd" id="1_panel"]
-[ext_resource type="Texture2D" path="res://assets_v2/icons/icon_talisman.png" id="2_icon"]
+[ext_resource type="Texture2D" path="res://assets_v3/production/icons/icon_sacrifice.png" id="2_icon"]
 
 [node name="SacrificePanel" type="CanvasLayer"]
 layer = 5
@@ -29,6 +29,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 texture = ExtResource("2_icon")
 expand_mode = 1
+stretch_mode = 5
 
 [node name="Title" type="Label" parent="Root/Panel"]
 offset_left = 46.0

@@ -1,0 +1,44 @@
+{
+  "character": "gate_warden",
+  "frame_size": [
+    320,
+    256
+  ],
+  "pivot": [
+    160,
+    248
+  ],
+  "foot_position": [
+    160,
+    248
+  ],
+  "animations": {
+    "idle": {
+      "frames": 4,
+      "fps": 5,
+      "loop": true
+    },
+    "walk": {
+      "frames": 6,
+      "fps": 7,
+      "loop": true
+    },
+    "attack": {
+      "frames": 5,
+      "fps": 9,
+      "loop": false,
+      "hit_frame": 2,
+      "recovery_frame": 4
+    },
+    "hurt": {
+      "frames": 2,
+      "fps": 7,
+      "loop": false
+    },
+    "death": {
+      "frames": 8,
+      "fps": 6,
+      "loop": false
+    }
+  }
+}

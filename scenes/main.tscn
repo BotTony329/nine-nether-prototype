@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bnnmain0000001"]
+[gd_scene load_steps=14 format=3 uid="uid://bnnmain0000001"]
 
 [ext_resource type="Script" path="res://scenes/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://scenes/arena.tscn" id="2_arena"]
@@ -13,8 +13,7 @@
 [ext_resource type="PackedScene" path="res://ui/result_screen.tscn" id="11_result"]
 [ext_resource type="PackedScene" path="res://ui/debug_panel.tscn" id="12_debug"]
 [ext_resource type="Script" path="res://ui/debug_shape_overlay.gd" id="13_shapes"]
-[ext_resource type="Script" path="res://visuals/combat_effects.gd" id="14_effects"]
-[ext_resource type="Texture2D" path="res://assets_v2/effects/hit.png" id="15_hit"]
+[ext_resource type="Script" path="res://visuals/combat_feedback.gd" id="14_feedback"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_main")
@@ -22,12 +21,6 @@ script = ExtResource("1_main")
 [node name="Arena" parent="." instance=ExtResource("2_arena")]
 
 [node name="Actors" type="Node2D" parent="."]
-
-[node name="CombatEffects" type="Node2D" parent="."]
-script = ExtResource("14_effects")
-hit_texture = ExtResource("15_hit")
-hit_frames = 4
-hit_fps = 16.0
 
 [node name="RunCoordinator" type="Node" parent="."]
 script = ExtResource("3_coordinator")
@@ -53,3 +46,6 @@ actor_root_path = NodePath("../Actors")
 
 [node name="DebugShapes" type="Node2D" parent="DebugRoot"]
 script = ExtResource("13_shapes")
+
+[node name="CombatFeedback" type="Node" parent="."]
+script = ExtResource("14_feedback")
