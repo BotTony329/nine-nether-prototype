@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="GhostArcherConfig" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://actors/enemies/ghost_archer_config.gd" id="1_config"]
+[ext_resource type="PackedScene" path="res://actors/enemies/ghost_arrow.tscn" id="2_projectile"]
+
+[resource]
+script = ExtResource("1_config")
+patrol_radius = 56.0
+patrol_speed_multiplier = 0.45
+preferred_distance = 150.0
+retreat_distance = 92.0
+projectile_scene = ExtResource("2_projectile")
+projectile_speed = 190.0
+projectile_lifetime = 2.4
+projectile_spawn_offset = Vector2(18, -22)
