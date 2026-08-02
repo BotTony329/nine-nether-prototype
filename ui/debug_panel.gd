@@ -12,6 +12,8 @@ extends CanvasLayer
 
 const HEAL_AMOUNT := 25.0
 const DAMAGE_AMOUNT := 15.0
+const GHOST_ARCHER_SCENE := preload("res://actors/enemies/ghost_archer.tscn")
+const GHOST_ARCHER_CONFIG := preload("res://data/actors/ghost_archer.tres")
 
 @onready var _panel: Panel = $Root/Panel
 @onready var _readout: Label = $Root/Panel/Readout
@@ -43,7 +45,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_coordinator.debug_damage(DAMAGE_AMOUNT)
 		_note("damaged %.0f" % DAMAGE_AMOUNT)
 	elif event.is_action_pressed(&"debug_spawn_enemy"):
-		_coordinator.debug_spawn_reference_enemy()
+		spawn_ghost_archer_for_debug()
 		_note("spawned Ghost Archer")
 	elif event.is_action_pressed(&"debug_start_boss"):
 		_coordinator.begin_boss()
@@ -110,3 +112,16 @@ func _describe(result: SacrificeResult, verb: String) -> String:
 func _note(message: String) -> void:
 	_last_message = message
 	print("[debug] ", message)
+
+
+func spawn_ghost_archer_for_debug() -> void:
+	# Keep the existing coordinator-owned spawn/list/death path. Its scene and
+	# config are injected public composition properties, so the debug command can
+	# select X02 without reaching into private coordinator state.
+	var previous_scene := _coordinator.enemy_scene
+	var previous_config := _coordinator.enemy_config
+	_coordinator.enemy_scene = GHOST_ARCHER_SCENE
+	_coordinator.enemy_config = GHOST_ARCHER_CONFIG
+	_coordinator.debug_spawn_reference_enemy()
+	_coordinator.enemy_scene = previous_scene
+	_coordinator.enemy_config = previous_config
